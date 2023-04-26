@@ -1,3 +1,1 @@
-Future<void> addToFav() async {
-  var newOne;
-}
+Future<void> addToFav() async {}
