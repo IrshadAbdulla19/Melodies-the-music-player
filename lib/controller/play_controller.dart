@@ -6,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 class PlayController extends GetxController {
   final audioquray = OnAudioQuery();
   final audioplayer = AudioPlayer();
-  final newAaudio;
   @override
   void onInit() {
     // TODO: implement onInit
