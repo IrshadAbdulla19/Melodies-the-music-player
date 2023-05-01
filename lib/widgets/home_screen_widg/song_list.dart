@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:music_player/controller/play_controller.dart';
+import 'package:music_player/db/functions/functions.dart';
+import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/functions/home_screen/home_function.dart';
 import 'package:music_player/screens/current_play_screen.dart';
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -13,125 +17,115 @@ class SongList extends StatefulWidget {
 }
 
 class _SongListState extends State<SongList> {
+  late Box<AllSongsLists> allsongBox;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    allsongBox = Hive.box<AllSongsLists>('allsong');
+  }
+
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(PlayController());
-
-    return
-        // ValueListenableBuilder(
-        //   valueListenable: ,
-        //   builder: (context, value, child) {
-        //     return GestureDetector(
-        //       child:
-        FutureBuilder<List<SongModel>>(
-            future: controller.audioquray.querySongs(
-                ignoreCase: true,
-                orderType: OrderType.ASC_OR_SMALLER,
-                sortType: null,
-                uriType: UriType.EXTERNAL),
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.data == null) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text(
-                    'No song is found',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              } else {
-                return ListView.separated(
-                    itemBuilder: (cntx, indx) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (cntx) {
-                            return CurrentPlayScreen(
-                              currentSong: snapshot.data![indx],
-                            );
-                          }));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 4),
-                          child: ListTile(
-                            tileColor: Color.fromARGB(113, 37, 36, 36),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              child: QueryArtworkWidget(
-                                id: snapshot.data![indx].id,
-                                type: ArtworkType.AUDIO,
-                                nullArtworkWidget: Icon(Icons.music_note),
-                              ),
-                              radius: 30,
-                            ),
-                            title: Text(
-                              snapshot.data![indx].displayNameWOExt,
+    return ValueListenableBuilder(
+        valueListenable: AllSongsNotifier,
+        builder: (BuildContext context, List<AllSongsLists> allSongs,
+            Widget? child) {
+          return ListView.separated(
+              itemBuilder: (cntx, indx) {
+                var song = allSongs[indx];
+                return GestureDetector(
+                  onTap: () {
+                    ChangeFormatesong(indx);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 4),
+                    child: ListTile(
+                      tileColor: Color.fromARGB(113, 37, 36, 36),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        child: QueryArtworkWidget(
+                          id: song.songID,
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: Icon(Icons.music_note),
+                        ),
+                        radius: 30,
+                      ),
+                      title: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              song.name,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              "${snapshot.data![indx].artist}",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            trailing: Wrap(
-                              spacing: 1,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      controller
-                                          .playSong(snapshot.data![indx].uri);
-                                    },
-                                    iconSize: 40,
-                                    color: Colors.white,
-                                    icon: Icon(Icons.play_circle)),
-                                PopupMenuButton(
-                                    color: Colors.white,
-                                    surfaceTintColor: Colors.black,
-                                    itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                              child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Add Playlist'),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    bottomSheet(context);
-                                                  },
-                                                  icon:
-                                                      Icon(Icons.playlist_add)),
-                                            ],
-                                          )),
-                                          PopupMenuItem(
-                                              child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Add to favourites'),
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(Icons.favorite))
-                                            ],
-                                          ))
-                                        ])
-                              ],
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (cntx, indx) {
-                      return Divider();
-                    },
-                    itemCount: snapshot.data!.length);
-              }
-            });
-    // );
-    // },
-    // );
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              song.artist,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Wrap(
+                        spacing: 1,
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              iconSize: 40,
+                              color: Colors.white,
+                              icon: Icon(Icons.play_circle)),
+                          PopupMenuButton(
+                              color: Colors.white,
+                              surfaceTintColor: Colors.black,
+                              itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Add Playlist'),
+                                        IconButton(
+                                            onPressed: () {
+                                              bottomSheet(context);
+                                            },
+                                            icon: Icon(Icons.playlist_add)),
+                                      ],
+                                    )),
+                                    PopupMenuItem(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Add to favourites'),
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(Icons.favorite))
+                                      ],
+                                    ))
+                                  ])
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (cntx, indx) {
+                return Divider();
+              },
+              itemCount: allSongs.length);
+        });
   }
 
   Future bottomSheet(BuildContext cntx) {

@@ -1,22 +1,21 @@
 import 'dart:ui';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:music_player/controller/play_controller.dart';
+
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class CurrentPlayScreen extends StatefulWidget {
-  CurrentPlayScreen({super.key, this.currentSong});
-  SongModel? currentSong;
+  CurrentPlayScreen({super.key, this.CurrentSongs, this.index});
+  int? index;
+  List<Audio>? CurrentSongs;
 
   @override
   State<CurrentPlayScreen> createState() => _CurrentPlayScreenState();
 }
 
 class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
-  var controller = Get.put(PlayController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +53,10 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
                                   width: double.infinity,
                                   height: 500,
                                   child: QueryArtworkWidget(
-                                    id: widget.currentSong?.id ?? 0,
+                                    id: int.parse(widget
+                                        .CurrentSongs![widget.index!]
+                                        .metas
+                                        .id!),
                                     type: ArtworkType.AUDIO,
                                     nullArtworkWidget: Image.asset(
                                       'asset/images/songe_screen.png',
@@ -78,11 +80,6 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
                           child: Container(
                               child: Card(
                             child: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          'asset/images/images (1).jpeg'),
-                                      fit: BoxFit.cover)),
                               child: ClipRRect(
                                 child: BackdropFilter(
                                   filter:
@@ -100,27 +97,27 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
                                                 padding: const EdgeInsets.only(
                                                     left: 25.0, top: 15),
                                                 child: Text(
-                                                  widget.currentSong
-                                                          ?.displayNameWOExt ??
-                                                      'song name',
+                                                  widget
+                                                      .CurrentSongs![
+                                                          widget.index!]
+                                                      .metas
+                                                      .title!,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                      color: Colors.white),
+                                                      color: Colors.black),
                                                 ),
                                               ),
                                             ),
                                             Row(
                                               children: [
                                                 IconButton(
-                                                    color: Colors.white,
-                                                    onPressed: () {
-                                                      bottomSheet(context);
-                                                    },
+                                                    color: Colors.black,
+                                                    onPressed: () {},
                                                     icon: Icon(
                                                         Icons.playlist_add)),
                                                 IconButton(
-                                                    color: Colors.white,
+                                                    color: Colors.black,
                                                     onPressed: () {},
                                                     icon: Icon(Icons.favorite))
                                               ],
@@ -134,19 +131,22 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
                                             Text(
                                               '00:00',
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.black),
                                             ),
                                             Slider.adaptive(
-                                                activeColor: Colors.blue,
-                                                inactiveColor: Colors.grey,
-                                                min: 0.0,
-                                                value: 2,
-                                                max: 2,
-                                                onChanged: (value) {}),
+                                              activeColor: Colors.blue,
+                                              inactiveColor: Colors.grey,
+                                              min: 0.0,
+                                              value: 2,
+                                              max: 2,
+                                              onChanged: (Value) {},
+                                              //                           onChangeStart: ,
+                                              // onChangeEnd: _onSliderDragEnd,
+                                            ),
                                             Text(
-                                              '03:05',
+                                              '03:55',
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.black),
                                             ),
                                           ],
                                         ),
@@ -157,44 +157,43 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
                                             IconButton(
                                                 onPressed: () {},
                                                 iconSize: 30,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 icon:
                                                     Icon(Icons.replay_rounded)),
                                             IconButton(
                                                 onPressed: () {},
                                                 iconSize: 30,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 icon: Icon(Icons
                                                     .skip_previous_rounded)),
                                             IconButton(
                                                 onPressed: () {},
                                                 iconSize: 30,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 icon: Icon(
                                                     Icons.fast_rewind_sharp)),
                                             IconButton(
-                                                onPressed: () {
-                                                  controller.playSong(
-                                                      widget.currentSong!.uri);
-                                                },
-                                                iconSize: 30,
-                                                color: Colors.white,
-                                                icon: Icon(Icons.play_circle)),
+                                              onPressed: () {},
+                                              iconSize: 30,
+                                              color: Colors.black,
+                                              icon:
+                                                  const Icon(Icons.play_arrow),
+                                            ),
                                             IconButton(
                                                 onPressed: () {},
                                                 iconSize: 30,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 icon: Icon(Icons.fast_forward)),
                                             IconButton(
                                                 onPressed: () {},
                                                 iconSize: 30,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 icon: Icon(
                                                     Icons.skip_next_rounded)),
                                             IconButton(
                                                 onPressed: () {},
                                                 iconSize: 30,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 icon: Icon(
                                                     Icons.shuffle_rounded)),
                                           ],

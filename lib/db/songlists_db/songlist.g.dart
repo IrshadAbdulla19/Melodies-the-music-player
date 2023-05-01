@@ -6,29 +6,30 @@ part of 'songlist.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SongsListsAdapter extends TypeAdapter<SongsLists> {
+class AllSongsListsAdapter extends TypeAdapter<AllSongsLists> {
   @override
   final int typeId = 1;
 
   @override
-  SongsLists read(BinaryReader reader) {
+  AllSongsLists read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SongsLists(
+    return AllSongsLists(
       name: fields[1] as String,
       artist: fields[2] as String,
       uri: fields[3] as String,
       songID: fields[4] as int,
+      duration: fields[5] as int,
       id: fields[0] as int?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SongsLists obj) {
+  void write(BinaryWriter writer, AllSongsLists obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class SongsListsAdapter extends TypeAdapter<SongsLists> {
       ..writeByte(3)
       ..write(obj.uri)
       ..writeByte(4)
-      ..write(obj.songID);
+      ..write(obj.songID)
+      ..writeByte(5)
+      ..write(obj.duration);
   }
 
   @override
@@ -47,7 +50,7 @@ class SongsListsAdapter extends TypeAdapter<SongsLists> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SongsListsAdapter &&
+      other is AllSongsListsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

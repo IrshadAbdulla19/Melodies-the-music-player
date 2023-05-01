@@ -1,11 +1,24 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+
 import 'package:music_player/widgets/favourite_screen/song_list_fav.dart';
 import 'package:music_player/widgets/favourite_screen/top_part_fav.dart';
 
-class FavoutieScreen extends StatelessWidget {
+class FavoutieScreen extends StatefulWidget {
   const FavoutieScreen({super.key});
+
+  @override
+  State<FavoutieScreen> createState() => _FavoutieScreenState();
+}
+
+class _FavoutieScreenState extends State<FavoutieScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +51,15 @@ class FavoutieScreen extends StatelessWidget {
                         ),
                         TopPartFavourite(),
                         Expanded(
-                          flex: 3,
-                          child: ListView.separated(
-                              itemBuilder: (cntx, indx) {
-                                return SongListFavourite();
-                              },
-                              separatorBuilder: (cntx, indx) {
-                                return Divider();
-                              },
-                              itemCount: 8),
-                        ),
+                            flex: 3,
+                            child: ListView.separated(
+                                itemBuilder: (cntx, indx) {
+                                  return SongListFavourite();
+                                },
+                                separatorBuilder: (cntx, indx) {
+                                  return Divider();
+                                },
+                                itemCount: 10)),
                       ],
                     ),
                   ),

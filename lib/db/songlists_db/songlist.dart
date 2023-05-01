@@ -2,7 +2,7 @@ import 'package:hive_flutter/adapters.dart';
 part 'songlist.g.dart';
 
 @HiveType(typeId: 1)
-class SongsLists {
+class AllSongsLists {
   @HiveField(0)
   int? id;
 
@@ -18,10 +18,14 @@ class SongsLists {
   @HiveField(4)
   int songID;
 
-  SongsLists(
+  @HiveField(5)
+  int duration;
+
+  AllSongsLists(
       {required this.name,
       required this.artist,
       required this.uri,
       required this.songID,
+      required this.duration,
       this.id});
 }

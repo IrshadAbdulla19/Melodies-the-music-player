@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:music_player/controller/play_controller.dart';
 import 'package:music_player/widgets/setting_widg/about_screen.dart';
 import 'package:music_player/widgets/setting_widg/prvacy_screen.dart';
 import 'package:music_player/widgets/setting_widg/terms_and_condition.dart';
@@ -109,6 +110,26 @@ class SettingScreen extends StatelessWidget {
                                       onPressed: () {},
                                       icon: Icon(Icons.file_copy_outlined)),
                                   Text('Terms and conditions',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 23))
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              checkpermission();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      color: Colors.white,
+                                      iconSize: 35,
+                                      onPressed: () {},
+                                      icon: Icon(Icons.exit_to_app_rounded)),
+                                  Text('For Sync',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 23))
                                 ],

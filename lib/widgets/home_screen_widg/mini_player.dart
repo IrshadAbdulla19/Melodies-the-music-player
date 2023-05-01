@@ -35,7 +35,7 @@ class MiniPlayer extends StatelessWidget {
                           'asset/images/537fb671eab8eae744d3ee96.webp'),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, left: 12),
+                      padding: const EdgeInsets.only(left: 12),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -49,13 +49,6 @@ class MiniPlayer extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Slider(
-                                  activeColor: Colors.blue,
-                                  inactiveColor: Colors.grey,
-                                  min: 0.0,
-                                  value: 2,
-                                  max: 2,
-                                  onChanged: (value) {}),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

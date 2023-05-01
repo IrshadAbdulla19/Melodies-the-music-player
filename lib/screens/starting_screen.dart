@@ -69,6 +69,38 @@ class StartingPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(28))),
                         child: Text("Let's start")),
                   ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 8.0, right: 120, left: 120),
+                  child: Container(
+                    width: 100,
+                    height: 55,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (cntx1) {
+                            return MainScreen(name: _usernameControler.text);
+                          }));
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(28))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "skip",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 15,
+                            )
+                          ],
+                        )),
+                  ),
                 )
               ],
             ),

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/db/functions/functions.dart';
 import 'package:music_player/widgets/home_screen_widg/mini_player.dart';
 
 import 'package:music_player/widgets/home_screen_widg/song_list.dart';
@@ -18,7 +19,7 @@ class HomeScreem extends StatefulWidget {
 class _HomeScreemState extends State<HomeScreem> {
   @override
   void initState() {
-    TopPart();
+    getFavSongs();
     super.initState();
   }
 
@@ -48,7 +49,7 @@ class _HomeScreemState extends State<HomeScreem> {
                         style: TextStyle(fontSize: 35, color: Colors.white),
                       ),
                     ),
-                    Expanded(flex: 5, child: SongList()),
+                    Expanded(flex: 9, child: SongList()),
                     Expanded(
                       flex: 2,
                       child: Container(

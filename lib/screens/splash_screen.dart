@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/db/functions/functions.dart';
 import 'package:music_player/main.dart';
 import 'package:music_player/screens/main_screen.dart';
 import 'package:music_player/screens/starting_screen.dart';
@@ -15,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     cheakUserIn();
+
     super.initState();
   }
 

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:music_player/controller/play_controller.dart';
+import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/screens/current_play_screen.dart';
+import 'package:music_player/widgets/home_screen_widg/song_list.dart';
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
 
 class SongListFavourite extends StatelessWidget {
-  const SongListFavourite({super.key});
+  SongListFavourite({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +32,11 @@ class SongListFavourite extends StatelessWidget {
           radius: 30,
         ),
         title: Text(
-          'Favourites',
+          'favSongname',
           style: TextStyle(color: Colors.white),
         ),
         subtitle: Text(
-          'singers name',
+          'favSongartist',
           style: TextStyle(color: Colors.white),
         ),
         trailing: Wrap(
