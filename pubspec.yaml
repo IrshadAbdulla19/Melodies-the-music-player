@@ -39,6 +39,7 @@ dependencies:
   on_audio_query: ^2.8.0
   permission_handler: ^10.2.0
   shared_preferences: ^2.1.0
+  text_scroll: ^0.2.0
 
 dev_dependencies:
   build_runner: ^2.3.3

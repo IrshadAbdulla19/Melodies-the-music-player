@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/styles/style.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -10,7 +11,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('asset/images/images (1).jpeg'),
                     fit: BoxFit.cover)),
@@ -23,24 +24,20 @@ class AboutScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: const EdgeInsets.only(left: 22.0),
                           child: Text(
                             'About my App',
-                            style: TextStyle(
-                                fontSize: 55,
-                                color: Colors.white,
-                                fontFamily: 'Dongle',
-                                fontWeight: FontWeight.bold),
+                            style: mainHead,
                           ),
                         ),
                         Expanded(
                           flex: 3,
                           child: ListView(
-                            children: [
+                            children: const [
                               Text(
                                 'Welcome to Melodius, the ultimate destination for music lovers everywhere. Our app is designed to provide you with the best possible music experience, whether youre a casual listener or a die-hard fan.',
-                                style: TextStyle(color: Colors.white),
+                                style: artistNameText,
                               ),
                               SizedBox(
                                 height: 30,
@@ -83,8 +80,7 @@ https://www.facebook.com/irshad.irshad.100483/
 https://www.instagram.com/__i_rsh_ad.__/
 https://www.youtube.com/channel/UCpXIcOPJsbRJSzWNRyu8LXA
 Of course, the specific content and formatting of an About page will vary depending on the app and the company behind it, but hopefully this example gives you a good idea of what an effective About page could look like.''',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15))
+                                  style: artistNameText)
                             ],
                           ),
                         ),

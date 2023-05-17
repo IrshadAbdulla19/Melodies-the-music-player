@@ -5,7 +5,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 ValueNotifier<List<AllSongsLists>> AllSongsNotifier = ValueNotifier([]);
 
-Future<void> getFavSongs() async {
+Future<void> getAllSongs() async {
   final allsongdatabase = await Hive.openBox<AllSongsLists>('allsong');
   AllSongsNotifier.value.clear();
   AllSongsNotifier.value.addAll(allsongdatabase.values);
@@ -21,7 +21,7 @@ addallsongtodata(SongModel data) async {
       songID: data.id,
       duration: data.duration!);
   bool flag = true;
-  int c = 0;
+
   for (var element in allsongdatabase.values) {
     if (newsong.songID == element.songID) {
       flag = false;
@@ -30,17 +30,9 @@ addallsongtodata(SongModel data) async {
   if (flag == true) {
     final _keyId = await allsongdatabase.add(newsong);
     newsong.id = _keyId;
-    c++;
-    getFavSongs();
+    getAllSongs();
     AllSongsNotifier.value.add(newsong);
     AllSongsNotifier.notifyListeners();
     // print(allsongdatabase.values);
   }
-  print(c);
-}
-
-Future<void> deleteSong(int id) async {
-  final studentDataB = await Hive.openBox<AllSongsLists>('allsong');
-  studentDataB.deleteAt(id);
-  getFavSongs();
 }

@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:music_player/controller/play_controller.dart';
+
+import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
+import 'package:music_player/styles/style.dart';
 import 'package:music_player/widgets/setting_widg/about_screen.dart';
 import 'package:music_player/widgets/setting_widg/prvacy_screen.dart';
 import 'package:music_player/widgets/setting_widg/terms_and_condition.dart';
@@ -15,7 +17,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('asset/images/images (1).jpeg'),
                     fit: BoxFit.cover)),
@@ -24,19 +26,19 @@ class SettingScreen extends StatelessWidget {
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 80, left: 40),
-                  child: Column(children: [
+                  child: ListView(children: [
                     Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.settings,
                           color: Colors.white,
                           size: 60,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(10.0),
                           child: Text(
                             'Settings',
-                            style: TextStyle(fontSize: 25, color: Colors.white),
+                            style: mainHead,
                           ),
                         )
                       ],
@@ -61,10 +63,9 @@ class SettingScreen extends StatelessWidget {
                                       iconSize: 35,
                                       onPressed: () {},
                                       icon: Icon(Icons.account_circle)),
-                                  Text(
+                                  const Text(
                                     'About',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 23),
+                                    style: settingsHeads,
                                   )
                                 ],
                               ),
@@ -86,9 +87,7 @@ class SettingScreen extends StatelessWidget {
                                       iconSize: 35,
                                       onPressed: () {},
                                       icon: Icon(Icons.privacy_tip_sharp)),
-                                  Text('Privacy',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 23))
+                                  const Text('Privacy', style: settingsHeads)
                                 ],
                               ),
                             ),
@@ -109,9 +108,8 @@ class SettingScreen extends StatelessWidget {
                                       iconSize: 35,
                                       onPressed: () {},
                                       icon: Icon(Icons.file_copy_outlined)),
-                                  Text('Terms and conditions',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 23))
+                                  const Text('Terms and conditions',
+                                      style: settingsHeads)
                                 ],
                               ),
                             ),
@@ -128,10 +126,8 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.exit_to_app_rounded)),
-                                  Text('For Sync',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 23))
+                                      icon: Icon(Icons.sync)),
+                                  const Text('For Sync', style: settingsHeads)
                                 ],
                               ),
                             ),
@@ -149,9 +145,7 @@ class SettingScreen extends StatelessWidget {
                                       iconSize: 35,
                                       onPressed: () {},
                                       icon: Icon(Icons.exit_to_app_rounded)),
-                                  Text('Exit app',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 23))
+                                  const Text('Exit app', style: settingsHeads)
                                 ],
                               ),
                             ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/db/functions/favourites_funt.dart';
 import 'package:music_player/db/functions/functions.dart';
+import 'package:music_player/db/functions/most_played.dart';
+import 'package:music_player/db/functions/play_list.dart';
+import 'package:music_player/db/functions/resent_played_db.dart';
 import 'package:music_player/main.dart';
 import 'package:music_player/screens/main_screen.dart';
 import 'package:music_player/screens/starting_screen.dart';
@@ -16,6 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     cheakUserIn();
+    getAllSongs();
+    getFavSongs();
+    getMostPlayed();
+    getResentPlyed();
+    getPlaylist();
 
     super.initState();
   }

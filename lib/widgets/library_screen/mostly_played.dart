@@ -1,73 +1,109 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:music_player/db/functions/favourites_funt.dart';
+import 'package:music_player/db/functions/most_played.dart';
+import 'package:music_player/db/functions/play_list.dart';
+import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
+import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/functions/home_screen/home_function.dart';
+import 'package:music_player/functions/library_functions/most_played.dart';
 
 import 'package:music_player/screens/current_play_screen.dart';
+import 'package:music_player/styles/style.dart';
 
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
-class MostlyPlayed extends StatelessWidget {
+class MostlyPlayed extends StatefulWidget {
   const MostlyPlayed({super.key});
 
   @override
+  State<MostlyPlayed> createState() => _MostlyPlayedState();
+}
+
+class _MostlyPlayedState extends State<MostlyPlayed> {
+  late Box<AllSongsLists> mostPlayBox;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    mostPlayBox = Hive.box('most_played_db');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0, bottom: 10),
-            child: Text(
-              'Mostly Played',
-              style: TextStyle(
-                  fontSize: 55,
-                  color: Colors.white,
-                  fontFamily: 'Dongle',
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 4,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 6, 59, 102),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(28))),
-                    )),
-                Expanded(
-                  flex: 1,
-                  child: CircleAvatar(
-                    child:
-                        IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (cntx, indx) {
-                    return SongListMostlyPlayed();
-                  }))
-        ],
-      ),
+    return
+        // Padding(
+        //   padding: const EdgeInsets.only(left: 8.0),
+        //   child: Row(
+        //     children: [
+        //       Expanded(
+        //           flex: 4,
+        //           child: TextFormField(
+        //             style: TextStyle(color: Colors.white),
+        //             decoration: InputDecoration(
+        //                 filled: true,
+        //                 fillColor: Color.fromARGB(255, 6, 59, 102),
+        //                 contentPadding: EdgeInsets.symmetric(
+        //                     vertical: 10, horizontal: 10),
+        //                 border: OutlineInputBorder(
+        //                     borderRadius: BorderRadius.circular(28))),
+        //           )),
+        //       Expanded(
+        //         flex: 1,
+        //         child: CircleAvatar(
+        //           child:
+        //               IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ),
+        ValueListenableBuilder(
+      valueListenable: mostPlayedNotifer,
+      builder:
+          (BuildContext cntx, List<AllSongsLists> mostSongs, Widget? child) {
+        return ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount:
+                // mostPlayedList.length,
+                mostSongs.length < 10 ? mostSongs.length : 10,
+            itemBuilder: (cntx, indx) {
+              var mostSong = mostSongs[indx];
+              bool isFavSong = isFav(mostSong);
+              return SongListMostlyPlayed(
+                mostSongs: mostSongs,
+                index: indx,
+                mostSong: mostSong,
+                isFavSong: isFavSong,
+              );
+            });
+      },
     );
   }
 }
 
-class SongListMostlyPlayed extends StatelessWidget {
-  const SongListMostlyPlayed({super.key});
+class SongListMostlyPlayed extends StatefulWidget {
+  SongListMostlyPlayed(
+      {super.key,
+      required this.mostSong,
+      required this.index,
+      required this.mostSongs,
+      required this.isFavSong});
+  AllSongsLists mostSong;
+  int index;
+  List<AllSongsLists> mostSongs;
+  bool isFavSong;
 
+  @override
+  State<SongListMostlyPlayed> createState() => _SongListMostlyPlayedState();
+}
+
+class _SongListMostlyPlayedState extends State<SongListMostlyPlayed> {
   @override
   Widget build(BuildContext context) {
     return
@@ -78,59 +114,111 @@ class SongListMostlyPlayed extends StatelessWidget {
         //       child:
         GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (cntx) {
-          return CurrentPlayScreen();
-        }));
+        ChangeFormatesong(widget.index, widget.mostSongs);
+        // Navigator.push(context, MaterialPageRoute(builder: (cntx) {
+        //   return CurrentPlayScreen();
+        // }));
       },
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage:
-              AssetImage('asset/images/537fb671eab8eae744d3ee96.webp'),
+          backgroundColor: Colors.black,
           radius: 30,
-        ),
-        title: Text(
-          'Mostly Played',
-          style: TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-          'singers name',
-          style: TextStyle(
-            color: Colors.white,
+          child: QueryArtworkWidget(
+            id: widget.mostSong.songID,
+            type: ArtworkType.AUDIO,
+            nullArtworkWidget: Icon(Icons.music_note),
           ),
+        ),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.mostSong.name,
+                style: songNameText,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        subtitle: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.mostSong.artist,
+                style: artistNameText,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
         trailing: Wrap(
           spacing: 1,
           children: [
+            Text(
+              widget.mostSong.count.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
             IconButton(
-                onPressed: () {},
+                iconSize: 35,
                 color: Colors.white,
-                iconSize: 40,
-                icon: Icon(Icons.play_circle)),
-            PopupMenuButton(
-                color: Colors.white,
-                itemBuilder: (context) => [
-                      PopupMenuItem(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Add Playlist'),
-                          IconButton(
-                              onPressed: () {
-                                bottomSheet(context);
-                              },
-                              icon: Icon(Icons.playlist_add)),
-                        ],
+                onPressed: () {
+                  setState(() {
+                    if (!widget.isFavSong) {
+                      addFavsongs(widget.mostSong, context);
+                      widget.isFavSong = !widget.isFavSong;
+                    } else {
+                      deleteFavSong(widget.mostSong);
+                      widget.isFavSong = !widget.isFavSong;
+                    }
+                  });
+                },
+                icon: widget.isFavSong
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      )
+                    : Icon(
+                        Icons.favorite,
+                        color: Colors.white,
                       )),
-                      PopupMenuItem(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Add to favourites'),
-                          IconButton(
-                              onPressed: () {}, icon: Icon(Icons.favorite))
-                        ],
-                      ))
-                    ])
+
+            IconButton(
+                iconSize: 35,
+                color: Colors.white,
+                onPressed: () {
+                  bottomSheet(context, widget.mostSong);
+                },
+                icon: Icon(Icons.playlist_add))
+            // IconButton(
+            //     onPressed: () {},
+            //     color: Colors.white,
+            //     iconSize: 40,
+            //     icon: Icon(Icons.play_circle)),
+            // PopupMenuButton(
+            //     color: Colors.white,
+            //     itemBuilder: (context) => [
+            //           PopupMenuItem(
+            //               child: Row(
+            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //             children: [
+            //               Text('Add Playlist'),
+            //               IconButton(
+            //                   onPressed: () {
+            //                     bottomSheet(context);
+            //                   },
+            //                   icon: Icon(Icons.playlist_add)),
+            //             ],
+            //           )),
+            //           PopupMenuItem(
+            //               child: Row(
+            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //             children: [
+            //               Text('Add to favourites'),
+            //               IconButton(
+            //                   onPressed: () {}, icon: Icon(Icons.favorite))
+            //             ],
+            //           ))
+            //         ])
           ],
         ),
       ),
@@ -140,44 +228,88 @@ class SongListMostlyPlayed extends StatelessWidget {
     // );
   }
 
-  Future bottomSheet(BuildContext cntx) {
+  Future bottomSheet(BuildContext cntx, AllSongsLists song) {
     return showModalBottomSheet(
         context: cntx,
         builder: (BuildContext context) {
-          return SizedBox(
+          return Container(
               height: 400,
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.grey,
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.keyboard_arrow_down_sharp))),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: playlistNames.length,
-                        itemBuilder: (cntx, indx) {
-                          return Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(playlistNames[indx]),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.add_circle))
-                                ],
-                              ),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('asset/images/images (2).jpeg'),
+                      fit: BoxFit.cover)),
+              child: ClipRRect(
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Column(
+                        children: [
+                          Container(
+                              color: Colors.grey,
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(Icons.keyboard_arrow_down_sharp))),
+                          Expanded(
+                            child: ValueListenableBuilder(
+                              valueListenable: PlaylistNotifer,
+                              builder: (BuildContext context,
+                                  List<PlayListModel> playlistList,
+                                  Widget? child) {
+                                return ListView.builder(
+                                    itemCount: playlistList.length,
+                                    itemBuilder: (cntx, indx) {
+                                      var playlist = playlistList[indx];
+                                      bool isInPlaylist =
+                                          checkPlaylist(song, indx);
+                                      return Card(
+                                        color: Color.fromARGB(255, 33, 87, 158),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                playlist.name,
+                                                style: songNameText,
+                                              ),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      if (!isInPlaylist) {
+                                                        addSongsToPlaylist(
+                                                            playlistList[indx],
+                                                            song);
+                                                        isInPlaylist =
+                                                            !isInPlaylist;
+                                                      } else {
+                                                        removeSongFromDB(song,
+                                                            playlist, indx);
+                                                        isInPlaylist =
+                                                            !isInPlaylist;
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: !isInPlaylist
+                                                      ? Icon(
+                                                          Icons.add_circle,
+                                                          color: Colors.white,
+                                                        )
+                                                      : Icon(
+                                                          Icons.remove,
+                                                          color: Colors.white,
+                                                        ))
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
                             ),
-                          );
-                        }),
-                  ),
-                ],
-              ));
+                          ),
+                        ],
+                      ))));
         });
   }
 }

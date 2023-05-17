@@ -1,8 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:music_player/db/functions/favourites_funt.dart';
 import 'package:music_player/db/functions/functions.dart';
+import 'package:music_player/db/functions/most_played.dart';
+import 'package:music_player/db/functions/play_list.dart';
+import 'package:music_player/db/functions/resent_played_db.dart';
+import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/styles/style.dart';
 import 'package:music_player/widgets/home_screen_widg/mini_player.dart';
+import 'package:music_player/widgets/home_screen_widg/search_widget.dart';
 
 import 'package:music_player/widgets/home_screen_widg/song_list.dart';
 import 'package:music_player/widgets/home_screen_widg/top_part.dart';
@@ -17,18 +25,34 @@ class HomeScreem extends StatefulWidget {
 }
 
 class _HomeScreemState extends State<HomeScreem> {
+  late FocusNode _focusNode;
   @override
   void initState() {
-    getFavSongs();
+    _focusNode = FocusNode();
+
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _focusNode.dispose();
+  }
+
+  final _allSongController = TextEditingController();
+
+  List<AllSongsLists> allSongs =
+      Hive.box<AllSongsLists>('allsong').values.toList();
+
+  late List<AllSongsLists> songDisplay = List<AllSongsLists>.from(allSongs);
+  int searchVar = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('asset/images/images (1).jpeg'),
                 fit: BoxFit.cover)),
@@ -42,20 +66,66 @@ class _HomeScreemState extends State<HomeScreem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TopPart(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 22.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: TextFormField(
+                            onTap: () {
+                              setState(() {
+                                searchVar = 1;
+                              });
+                            },
+                            focusNode: _focusNode,
+                            controller: _allSongController,
+                            style: TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    onPressed: () => clearText()),
+                                filled: true,
+                                fillColor: Color.fromARGB(255, 6, 59, 102),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(28))),
+                            onChanged: (value) {
+                              _searchStudent(value.trim());
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: CircleAvatar(
+                            child: IconButton(
+                                onPressed: () {
+                                  _focusNode.unfocus();
+                                },
+                                icon: Icon(Icons.search)),
+                          ),
+                        )
+                      ],
+                    ),
+                    const Padding(
+                      padding: const EdgeInsets.only(left: 22.0, top: 15),
                       child: Text(
                         'All songs',
-                        style: TextStyle(fontSize: 35, color: Colors.white),
+                        style: miniHead,
                       ),
                     ),
-                    Expanded(flex: 9, child: SongList()),
                     Expanded(
-                      flex: 2,
-                      child: Container(
-                        child: MiniPlayer(),
-                      ),
-                    )
+                        flex: 9,
+                        child: searchVar == 0
+                            ? SongList()
+                            : AllSongSerach(
+                                songDisplay: songDisplay,
+                              )),
+                    // Expanded(
+                    //   flex: 2,
+                    //   child: Container(
+                    //     child: MiniPlayer(),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -64,5 +134,22 @@ class _HomeScreemState extends State<HomeScreem> {
         ),
       ),
     );
+  }
+
+  void _searchStudent(String value) {
+    setState(() {
+      songDisplay = allSongs
+          .where((element) =>
+              element.name.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void clearText() {
+    _allSongController.clear();
+    _focusNode.unfocus();
+    setState(() {
+      searchVar = 0;
+    });
   }
 }

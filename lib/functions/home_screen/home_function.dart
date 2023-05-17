@@ -1,17 +1,72 @@
-import 'package:music_player/db/functions/functions.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:flutter/material.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
-Future<void> addToFav(SongModel data) async {
-  String? artistname = data.artist;
-  String? uri = data.uri;
-  String? songName = data.displayNameWOExt;
-  int? id = data.id;
+final audioPlayer = AssetsAudioPlayer();
+ValueNotifier<bool> isSongPlayingNotifier = ValueNotifier(false);
 
-  // final favSong = AllSongsLists(
-  //     name: songName,
-  //     artist: artistname ?? 'artisName',
-  //     uri: uri ?? 'uri',
-  //     songID: id);
-  // addFavSongs(favSong);
+List<Audio> audioSongs = [];
+// bool isSongPlaying = false;
+// List<AllSongsLists> nowPlayinglist = [];
+// AllSongsLists? nowPlay;
+
+ChangeFormatesong(int index, List<AllSongsLists>? currentSongs) {
+  // nowPlayinglist.clear();
+  bool songOn = true;
+  isSongPlayingNotifier.value = songOn;
+  isSongPlayingNotifier.notifyListeners();
+  // nowPlayinglist = currentSongs ?? nowPlayinglist;
+  // nowPlay = currentSongs?[index];
+
+  audioSongs.clear();
+  if (currentSongs != null) {
+    for (var element in currentSongs) {
+      audioSongs.add(Audio.file(element.uri,
+          metas: Metas(
+            id: element.songID.toString(),
+            artist: element.artist,
+            title: element.name,
+          )));
+
+      // audioPlayer.play();
+    }
+  }
+  audioPlayer.open(
+      Playlist(
+        audios: audioSongs,
+        startIndex: index,
+      ),
+      loopMode: LoopMode.playlist,
+      autoStart: true,
+      showNotification: true);
 }
+
+forChangeToSongModel(List<Audio> audios, int index) {
+  List<AllSongsLists> nowPLaySonsg = [];
+  // AllSongsLists song;
+  audioSongs.forEach((element) {});
+}
+// audioPlayer.open(a
+//   Playlist(audios: audioSongs, startIndex: index),
+//   autoStart: false,
+// );
+
+// playsongs(int index) {
+//   try {
+//     audioPlayer.open(
+//         Playlist(
+//           audios: audioSongs,
+//           startIndex: index,
+//         ),
+//         autoStart: false);
+//   } catch (e) {
+//     print('the error in the code is $e');
+//   }
+// }
+
+
+
+// playSong(AllSongsLists song) {
+//   audioPlayer.open(File(song.uri) as Playable);
+//   audioPlayer.play();
+// }

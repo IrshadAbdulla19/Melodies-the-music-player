@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/functions/library_functions/play_list.dart';
+import 'package:music_player/styles/style.dart';
 
 class PlaylistAdd extends StatelessWidget {
   PlaylistAdd({super.key});
@@ -17,7 +19,7 @@ class PlaylistAdd extends StatelessWidget {
                 icon: Icon(Icons.keyboard_arrow_down_sharp))),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('asset/images/images (1).jpeg'),
                 fit: BoxFit.cover)),
@@ -27,15 +29,11 @@ class PlaylistAdd extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.only(bottom: 40.0, left: 10),
                 child: Text(
                   'Create new playlist',
-                  style: TextStyle(
-                      fontSize: 55,
-                      color: Colors.white,
-                      fontFamily: 'Dongle',
-                      fontWeight: FontWeight.bold),
+                  style: mainHead,
                 ),
               ),
               TextFormField(
@@ -71,7 +69,10 @@ class PlaylistAdd extends StatelessWidget {
                       width: 140,
                       height: 40,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            changeToPlaylist(_playlistNameController.text);
+                            Navigator.pop(context);
+                          },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
                               shape: RoundedRectangleBorder(

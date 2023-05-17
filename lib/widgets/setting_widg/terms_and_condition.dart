@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/styles/style.dart';
 
 class TermsAndCondition extends StatelessWidget {
   const TermsAndCondition({super.key});
@@ -10,7 +11,7 @@ class TermsAndCondition extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('asset/images/images (1).jpeg'),
                     fit: BoxFit.cover)),
@@ -23,23 +24,19 @@ class TermsAndCondition extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: const EdgeInsets.only(left: 22.0),
                           child: Text(
                             'Terms and conditions',
-                            style: TextStyle(
-                                fontSize: 55,
-                                color: Colors.white,
-                                fontFamily: 'Dongle',
-                                fontWeight: FontWeight.bold),
+                            style: mainHead,
                           ),
                         ),
                         Expanded(
                           flex: 3,
                           child: ListView(
-                            children: [
+                            children: const [
                               Text(
-                                '''User eligibility: Users must be at least 13 years old to use the app.
+                                  '''User eligibility: Users must be at least 13 years old to use the app.
 
 User conduct: Users must use the app in a responsible and respectful manner and may not use the app to upload or share any illegal or infringing content.
 
@@ -56,9 +53,7 @@ Termination and suspension: The app may terminate or suspend a user's account fo
 Disclaimers and limitations of liability: The app provides the service "as is" and does not guarantee that it will be uninterrupted or error-free. The app is not liable for any direct, indirect, incidental, or consequential damages arising from the use of the app or its content.
 
 Changes to terms and conditions: The app reserves the right to modify or update the terms and conditions at any time, and users will be notified of any changes via email or on the app. Users are responsible for reviewing the updated terms and conditions and continuing to use the app constitutes acceptance of the changes.''',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                              )
+                                  style: artistNameText)
                             ],
                           ),
                         ),

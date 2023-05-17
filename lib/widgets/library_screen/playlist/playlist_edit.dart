@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
+import 'package:music_player/functions/library_functions/play_list.dart';
+import 'package:music_player/styles/style.dart';
 
-class PlaylistRename extends StatelessWidget {
-  PlaylistRename({super.key});
+class PlaylistRename extends StatefulWidget {
+  PlaylistRename({super.key, required this.index, required this.playlistItem});
+  int index;
+  PlayListModel playlistItem;
+  @override
+  State<PlaylistRename> createState() => _PlaylistRenameState();
+}
+
+class _PlaylistRenameState extends State<PlaylistRename> {
   final _playlistNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,21 +38,19 @@ class PlaylistRename extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.only(bottom: 40.0, left: 10),
                 child: Text(
                   'Rename your playlist',
-                  style: TextStyle(
-                      fontSize: 55,
-                      color: Colors.white,
-                      fontFamily: 'Dongle',
-                      fontWeight: FontWeight.bold),
+                  style: mainHead,
                 ),
               ),
               TextFormField(
                 style: TextStyle(color: Colors.white),
                 controller: _playlistNameController,
                 decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.white),
+                    hintText: widget.playlistItem.name,
                     filled: true,
                     fillColor: Color.fromARGB(255, 6, 59, 102),
                     contentPadding:
@@ -71,7 +80,11 @@ class PlaylistRename extends StatelessWidget {
                       width: 140,
                       height: 40,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            updatePlaylist(_playlistNameController.text,
+                                widget.index, widget.playlistItem);
+                            Navigator.pop(context);
+                          },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
                               shape: RoundedRectangleBorder(

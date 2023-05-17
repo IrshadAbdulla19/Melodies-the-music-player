@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/styles/style.dart';
 
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({super.key});
@@ -10,7 +11,7 @@ class PrivacyScreen extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('asset/images/images (1).jpeg'),
                     fit: BoxFit.cover)),
@@ -23,21 +24,17 @@ class PrivacyScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: const EdgeInsets.only(left: 22.0),
                           child: Text(
                             'Privacy Policy',
-                            style: TextStyle(
-                                fontSize: 55,
-                                color: Colors.white,
-                                fontFamily: 'Dongle',
-                                fontWeight: FontWeight.bold),
+                            style: mainHead,
                           ),
                         ),
                         Expanded(
                           flex: 3,
                           child: ListView(
-                            children: [
+                            children: const [
                               Text(
                                 '''Melodius we operates the Melodius mobile application .
 
@@ -106,8 +103,7 @@ To protect against legal liability
 Security of Data
 
 The security of your data is important to us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data,''',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
+                                style: artistNameText,
                               )
                             ],
                           ),

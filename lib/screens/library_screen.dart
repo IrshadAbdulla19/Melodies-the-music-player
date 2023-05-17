@@ -1,10 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/styles/style.dart';
 
 import 'package:music_player/widgets/library_screen/mostly_played.dart';
+import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
 import 'package:music_player/widgets/library_screen/resently_played.dart';
+
+int currentList = 0;
+final screenName = ['Resently Played', 'Mostly Played', 'Playlist'];
+final screens = [ResentlyPlayed(), MostlyPlayed(), PlayList()];
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -14,13 +20,10 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-  final screenName = ['Resently Played', 'Mostly Played', 'Playlist'];
-  int _currentList = 0;
-  final screens = [ResentlyPlayed(), MostlyPlayed(), PlayList()];
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('asset/images/images (1).jpeg'),
               fit: BoxFit.cover)),
@@ -33,66 +36,119 @@ class _LibraryScreenState extends State<LibraryScreen> {
           resizeToAvoidBottomInset: false,
 
           body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 22.0),
-                    child: Text(
-                      'Library',
-                      style: TextStyle(
-                          fontSize: 55,
-                          color: Colors.white,
-                          fontFamily: 'Dongle',
-                          fontWeight: FontWeight.bold),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding: const EdgeInsets.only(left: 22.0),
+                      child: Text(
+                        'Library',
+                        style: mainHead,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 250,
-                    child: ListView.builder(
-                        itemCount: 3,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (cntx, indx) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _currentList = indx;
-                              });
-                            },
-                            child: Container(
-                              width: 300,
-                              height: 100,
-                              margin: EdgeInsets.all(8),
-                              child: Center(
-                                child: Text(
-                                  screenName[indx],
-                                  style: TextStyle(
-                                      fontSize: 55,
-                                      color: Colors.white,
-                                      fontFamily: 'Dongle',
-                                      fontWeight: FontWeight.bold),
+                    SizedBox(
+                        height: 300,
+                        child: ListView.builder(
+                            itemCount: 3,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (cntx, indx) {
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    currentList = indx;
+                                  });
+                                },
+                                child: Container(
+                                  width: 250,
+                                  height: 100,
+                                  margin: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'asset/images/bk$indx.jpg'),
+                                          fit: BoxFit.cover),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: Text(
+                                      screenName[indx],
+                                      style: mainHead,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          'asset/images/bk$indx.jpg'),
-                                      fit: BoxFit.cover),
-                                  borderRadius: BorderRadius.circular(50)),
-                            ),
-                          );
-                        }),
-                  ),
-                  Flexible(child: screens[_currentList])
-                ],
+                              );
+                            })),
+                    Flexible(
+                        child: Text(
+                      screenName[currentList],
+                      style: mainHead,
+                    )),
+                    currentList == 2 ? ForPlayList() : ForOther(),
+                    Flexible(child: screens[currentList])
+                  ],
+                ),
               ),
             ),
           ),
         ),
       )),
+    );
+  }
+}
+
+class ForPlayList extends StatefulWidget {
+  const ForPlayList({
+    super.key,
+  });
+
+  @override
+  State<ForPlayList> createState() => _ForPlayListState();
+}
+
+class _ForPlayListState extends State<ForPlayList> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (cntx1) {
+              return PlaylistAdd();
+            }));
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 14, 65, 107),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(28))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Add Playlist",
+                style: TextStyle(fontSize: 17),
+              ),
+              Icon(
+                Icons.add,
+                size: 15,
+              )
+            ],
+          )),
+    );
+  }
+}
+
+class ForOther extends StatelessWidget {
+  const ForOther({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 10,
+      width: 10,
     );
   }
 }
