@@ -32,13 +32,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_markdown: ^0.6.14
   get: ^4.6.5
   google_nav_bar: ^5.0.6
   hive_flutter: ^1.1.0
-  just_audio: ^0.9.32
   on_audio_query: ^2.8.0
+  page_transition: ^2.0.9
   permission_handler: ^10.2.0
+  share_plus: ^7.0.1
   shared_preferences: ^2.1.0
+  slide_to_act: ^2.0.1
   text_scroll: ^0.2.0
 
 dev_dependencies:
@@ -62,19 +65,15 @@ flutter:
   assets:
     - asset/images/logo.png
     - asset/images/logo_black.png
-    - asset/images/playlist.png
-    - asset/images/537fb671eab8eae744d3ee96.webp
-    - asset/images/background0.jpg
-    - asset/images/background1.jpg
-    - asset/images/background2.jpg
     - asset/images/images (1).jpeg
     - asset/images/bk0.jpg
     - asset/images/bk1.jpg
     - asset/images/bk2.jpg
-    - asset/images/playlistback.jpg
     - asset/images/images (2).jpeg
     - asset/images/music_player_screen.jpg
     - asset/images/songe_screen.png
+    - asset/privacy_and_policy/privacy.md
+    - asset/privacy_and_policy/terms.md
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -2,14 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-import 'package:music_player/db/functions/functions.dart';
-import 'package:music_player/db/functions/most_played.dart';
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/functions/resent_played_db.dart';
+
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/styles/style.dart';
-import 'package:music_player/widgets/home_screen_widg/mini_player.dart';
+
 import 'package:music_player/widgets/home_screen_widg/search_widget.dart';
 
 import 'package:music_player/widgets/home_screen_widg/song_list.dart';

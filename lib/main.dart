@@ -40,8 +40,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-Future<void> createHiveBoxes() async {
-  // await Hive.openBox<FavouriteSongsModel>('favsongs');
-  await Hive.openBox<AllSongsLists>('allsong');
-}

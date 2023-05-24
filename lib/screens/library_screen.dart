@@ -128,7 +128,7 @@ class _ForPlayListState extends State<ForPlayList> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Add Playlist",
+                "Create Playlist",
                 style: TextStyle(fontSize: 17),
               ),
               Icon(

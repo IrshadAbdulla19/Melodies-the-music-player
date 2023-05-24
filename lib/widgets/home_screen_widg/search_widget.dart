@@ -1,13 +1,18 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:music_player/db/functions/favourites_funt.dart';
+import 'package:music_player/db/functions/play_list.dart';
+import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
 import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
 import 'package:music_player/screens/current_play_screen.dart';
 import 'package:music_player/styles/style.dart';
+import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -27,6 +32,7 @@ class _SongListState extends State<AllSongSerach> {
         ? ListView.separated(
             itemBuilder: (cntx, indx) {
               var song = widget.songDisplay[indx];
+              bool isFavSong = isFav(song);
               return GestureDetector(
                 onTap: () {
                   // playsongs(indx);
@@ -80,17 +86,32 @@ class _SongListState extends State<AllSongSerach> {
                         IconButton(
                             iconSize: 35,
                             color: Colors.white,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.favorite,
-                              color: Colors.white,
-                            )),
+                            onPressed: () {
+                              setState(() {
+                                if (!isFavSong) {
+                                  addFavsongs(song, context);
+                                  isFavSong = !isFavSong;
+                                } else {
+                                  deleteFavSong(song);
+                                  isFavSong = !isFavSong;
+                                }
+                              });
+                            },
+                            icon: !isFavSong
+                                ? Icon(
+                                    Icons.favorite,
+                                    color: Colors.white,
+                                  )
+                                : Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  )),
 
                         IconButton(
                             iconSize: 35,
                             color: Colors.white,
                             onPressed: () {
-                              bottomSheet(context);
+                              bottomSheet(context, song);
                             },
                             icon: Icon(Icons.playlist_add))
                         // IconButton(
@@ -159,44 +180,115 @@ class _SongListState extends State<AllSongSerach> {
           );
   }
 
-  Future bottomSheet(BuildContext cntx) {
+  Future bottomSheet(BuildContext cntx, AllSongsLists song) {
     return showModalBottomSheet(
         context: cntx,
         builder: (BuildContext context) {
-          return SizedBox(
+          var mediaQuary = MediaQuery.of(context);
+          return Container(
               height: 400,
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.grey,
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.keyboard_arrow_down_sharp))),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: playlistNames.length,
-                        itemBuilder: (cntx, indx) {
-                          return Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(playlistNames[indx]),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.add_circle))
-                                ],
-                              ),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('asset/images/images (2).jpeg'),
+                      fit: BoxFit.cover)),
+              child: ClipRRect(
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            height: mediaQuary.size.height * 0.06,
+                            width: mediaQuary.size.width * 0.5,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (cntx1) {
+                                    return PlaylistAdd();
+                                  }));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 6, 59, 102),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(28))),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Create playlist",
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    Icon(
+                                      Icons.add,
+                                      size: 15,
+                                    )
+                                  ],
+                                )),
+                          ),
+                          Expanded(
+                            child: ValueListenableBuilder(
+                              valueListenable: PlaylistNotifer,
+                              builder: (BuildContext context,
+                                  List<PlayListModel> playlistList,
+                                  Widget? child) {
+                                return ListView.builder(
+                                    itemCount: playlistList.length,
+                                    itemBuilder: (cntx, indx) {
+                                      var playlist = playlistList[indx];
+                                      bool isInPlaylist =
+                                          checkPlaylist(song, indx);
+                                      return Card(
+                                        color: Color.fromARGB(255, 33, 87, 158),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                playlist.name,
+                                                style: songNameText,
+                                              ),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      if (!isInPlaylist) {
+                                                        addSongsToPlaylist(
+                                                            playlistList[indx],
+                                                            song);
+                                                        isInPlaylist =
+                                                            !isInPlaylist;
+                                                      } else {
+                                                        removeSongFromDB(song,
+                                                            playlist, indx);
+                                                        isInPlaylist =
+                                                            !isInPlaylist;
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: !isInPlaylist
+                                                      ? Icon(
+                                                          Icons.add_circle,
+                                                          color: Colors.white,
+                                                        )
+                                                      : Icon(
+                                                          Icons.remove,
+                                                          color: Colors.white,
+                                                        ))
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
                             ),
-                          );
-                        }),
-                  ),
-                ],
-              ));
+                          ),
+                        ],
+                      ))));
         });
   }
 }

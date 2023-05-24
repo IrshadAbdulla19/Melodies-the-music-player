@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/db/functions/favourites_funt.dart';
 import 'package:music_player/db/functions/functions.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
@@ -23,7 +24,7 @@ class MiniPlayer extends StatefulWidget {
 class _MiniPlayerState extends State<MiniPlayer> {
   bool isPlaying = true;
 
-  // @override
+  @override
   // void dispose() {
   //   // TODO: implement dispose
   //   super.dispose();
@@ -38,12 +39,11 @@ class _MiniPlayerState extends State<MiniPlayer> {
       mostPlayAdd(int.parse(playing.audio.audio.metas.id!));
       return GestureDetector(
           onTap: () {
-            AllSongsLists song =
-                changeToSongModel(int.parse(playing.audio.audio.metas.id!));
+            // AllSongsLists song =
+            //     changeToSongModel(int.parse(playing.audio.audio.metas.id!));
+            // bool isFavSong = isFav(song);
             Navigator.push(context, MaterialPageRoute(builder: (cntx) {
-              return CurrentPlayScreen(
-                song: song,
-              );
+              return CurrentPlayScreen();
             }));
           },
           child: Container(
@@ -85,39 +85,43 @@ class _MiniPlayerState extends State<MiniPlayer> {
                     ),
                     // subtitle: Text('artist'),
                     subtitle: Wrap(
+                      alignment: WrapAlignment.spaceAround,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              audioPlayer.previous();
+                            },
                             color: Colors.white,
                             // iconSize: 35,
                             icon: Icon(Icons.skip_previous_rounded)),
+                        PlayerBuilder.isPlaying(
+                            player: audioPlayer,
+                            builder: (cntx, isPlaying) {
+                              return IconButton(
+                                  onPressed: () {
+                                    if (isPlaying) {
+                                      audioPlayer.pause();
+                                    } else {
+                                      audioPlayer.play();
+                                    }
+                                  },
+                                  // iconSize: 30,
+                                  color: Colors.white,
+                                  icon: isPlaying
+                                      ? Icon(Icons.pause)
+                                      : Icon(Icons.play_arrow));
+                            }),
                         IconButton(
                             onPressed: () {
-                              if (isPlaying) {
-                                audioPlayer.pause();
-                                setState(() {
-                                  isPlaying = false;
-                                });
-                              } else {
-                                audioPlayer.play();
-                                setState(() {
-                                  isPlaying = true;
-                                });
-                              }
+                              audioPlayer.next();
                             },
-                            // iconSize: 30,
-                            color: Colors.white,
-                            icon: isPlaying
-                                ? Icon(Icons.pause)
-                                : Icon(Icons.play_arrow)),
-                        IconButton(
-                            onPressed: () {},
                             color: Colors.white,
                             // iconSize: 35,
                             icon: Icon(Icons.skip_next_rounded)),
                         IconButton(
                             onPressed: () {
                               audioPlayer.stop();
+                              // dispose();
                               setState(() {
                                 isPlaying = false;
                                 isSongPlayingNotifier.value = isPlaying;
@@ -134,15 +138,4 @@ class _MiniPlayerState extends State<MiniPlayer> {
           ));
     });
   }
-}
-
-AllSongsLists changeToSongModel(int songId) {
-  late AllSongsLists data;
-  for (var element in AllSongsNotifier.value) {
-    if (element.songID == songId) {
-      data = element;
-      break;
-    }
-  }
-  return data;
 }

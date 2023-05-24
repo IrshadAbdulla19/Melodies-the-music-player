@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
 import 'package:music_player/styles/style.dart';
-import 'package:music_player/widgets/setting_widg/about_screen.dart';
-import 'package:music_player/widgets/setting_widg/prvacy_screen.dart';
-import 'package:music_player/widgets/setting_widg/terms_and_condition.dart';
+
+import 'package:music_player/widgets/setting_widg/privacy_and_terms.dart';
+import 'package:share_plus/share_plus.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -49,10 +49,23 @@ class SettingScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (cntx) {
-                                return AboutScreen();
-                              }));
+                              showAboutDialog(
+                                  context: context,
+                                  applicationName: "Melodies",
+                                  applicationIcon: Image.asset(
+                                    "asset/images/logo.png",
+                                    height: 32,
+                                    width: 32,
+                                  ),
+                                  applicationVersion: "1.0.1",
+                                  children: [
+                                    const Text(
+                                        "irshadMusic is an offline music player app which allows use to hear music from their local storage and also do functions like add to favorites , create playlists , recently played , mostly played etc."),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    const Text("App developed by Irshad A A.")
+                                  ]);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(14.0),
@@ -73,10 +86,12 @@ class SettingScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (cntx) {
-                                return PrivacyScreen();
-                              }));
+                              showDialog(
+                                context: context,
+                                builder: (context) => privacydialoge(
+                                  mdFileName: 'privacy.md',
+                                ),
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(14.0),
@@ -94,10 +109,12 @@ class SettingScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (cntx) {
-                                return TermsAndCondition();
-                              }));
+                              showDialog(
+                                context: context,
+                                builder: (context) => privacydialoge(
+                                  mdFileName: 'terms.md',
+                                ),
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(14.0),
@@ -115,8 +132,8 @@ class SettingScreen extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              checkpermission();
+                            onTap: () async {
+                              bottomSheet(context);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(14.0),
@@ -126,12 +143,30 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.sync)),
-                                  const Text('For Sync', style: settingsHeads)
+                                      icon: Icon(Icons.share)),
+                                  const Text('For share', style: settingsHeads)
                                 ],
                               ),
                             ),
                           ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     checkpermission();
+                          //   },
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.all(14.0),
+                          //     child: Row(
+                          //       children: [
+                          //         IconButton(
+                          //             color: Colors.white,
+                          //             iconSize: 35,
+                          //             onPressed: () {},
+                          //             icon: Icon(Icons.sync)),
+                          //         const Text('For Sync', style: settingsHeads)
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                           GestureDetector(
                             onTap: () {
                               forExit(context);
@@ -164,4 +199,26 @@ class SettingScreen extends StatelessWidget {
     sharepref.clear();
     SystemNavigator.pop();
   }
+
+  Future bottomSheet(
+    BuildContext cntx,
+  ) async {
+    return showModalBottomSheet(
+        context: cntx,
+        builder: (BuildContext context) {
+          const urllink = 'com.melodieuse.music_player';
+          Share.share(urllink);
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          return Container();
+        });
+  }
 }
+
+// void shareText() async {
+//   try {
+//     await FlutterShare.share(title: 'check out this flutter app');
+//   } catch (e) {
+//     print('Sharing failed: $e');
+//   }
+// }

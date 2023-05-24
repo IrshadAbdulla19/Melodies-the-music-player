@@ -4,9 +4,11 @@ import 'package:music_player/db/functions/functions.dart';
 import 'package:music_player/db/functions/most_played.dart';
 import 'package:music_player/db/functions/play_list.dart';
 import 'package:music_player/db/functions/resent_played_db.dart';
+import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
 import 'package:music_player/main.dart';
 import 'package:music_player/screens/main_screen.dart';
 import 'package:music_player/screens/starting_screen.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    checkpermission();
     cheakUserIn();
     getAllSongs();
     getFavSongs();
@@ -31,14 +34,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var _mediaQuary = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
           child: Center(
         child: Image.asset(
           'asset/images/logo_black.png',
-          width: 300,
-          height: 430,
+          width: _mediaQuary.size.width * 0.7,
+          height: _mediaQuary.size.height * 0.9,
         ),
       )),
     );

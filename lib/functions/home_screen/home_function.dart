@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/db/functions/functions.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 
 final audioPlayer = AssetsAudioPlayer();
@@ -41,10 +42,15 @@ ChangeFormatesong(int index, List<AllSongsLists>? currentSongs) {
       showNotification: true);
 }
 
-forChangeToSongModel(List<Audio> audios, int index) {
-  List<AllSongsLists> nowPLaySonsg = [];
-  // AllSongsLists song;
-  audioSongs.forEach((element) {});
+AllSongsLists changeToSongModel(int songId) {
+  late AllSongsLists data;
+  for (var element in AllSongsNotifier.value) {
+    if (element.songID == songId) {
+      data = element;
+      break;
+    }
+  }
+  return data;
 }
 // audioPlayer.open(a
 //   Playlist(audios: audioSongs, startIndex: index),

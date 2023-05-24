@@ -26,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var _mediaQuary = MediaQuery.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: screens[_currentScreen],
@@ -39,37 +40,43 @@ class _MainScreenState extends State<MainScreen> {
                 return isPlay ? const MiniPlayer() : const SizedBox();
               }),
           Container(
+            width: double.infinity,
             color: Colors.black,
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: GNav(
-                    activeColor: Colors.white,
-                    backgroundColor: Colors.black,
-                    color: Colors.white,
-                    tabBackgroundColor: Color.fromARGB(255, 77, 70, 70),
-                    onTabChange: (index) {
-                      setState(() {
-                        _currentScreen = index;
-                      });
-                    },
-                    tabs: [
-                      GButton(
-                        icon: Icons.home,
-                        text: 'Home',
-                      ),
-                      GButton(
-                        icon: Icons.favorite,
-                        text: 'Favourites',
-                      ),
-                      GButton(
-                        icon: Icons.library_music_rounded,
-                        text: 'Library',
-                      ),
-                      GButton(
-                        icon: Icons.settings,
-                        text: 'Settings',
-                      ),
-                    ])),
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+              child: GNav(
+                  activeColor: Colors.white,
+                  backgroundColor: Colors.black,
+                  color: Colors.white,
+                  tabBackgroundColor: Color.fromARGB(255, 77, 70, 70),
+                  onTabChange: (index) {
+                    setState(() {
+                      _currentScreen = index;
+                    });
+                  },
+                  tabs: [
+                    GButton(
+                      padding: EdgeInsets.all(15),
+                      icon: Icons.home,
+                      text: 'Home',
+                    ),
+                    GButton(
+                      padding: EdgeInsets.all(15),
+                      icon: Icons.favorite,
+                      text: 'Favourite',
+                    ),
+                    GButton(
+                      padding: EdgeInsets.all(15),
+                      icon: Icons.library_music_rounded,
+                      text: 'Library',
+                    ),
+                    GButton(
+                      padding: EdgeInsets.all(15),
+                      icon: Icons.settings,
+                      text: 'Settings',
+                    ),
+                  ]),
+            ),
           ),
         ],
       ),

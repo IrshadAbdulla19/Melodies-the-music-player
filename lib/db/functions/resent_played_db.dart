@@ -42,7 +42,7 @@ Future<void> addResentPlyed(AllSongsLists value) async {
   for (var element in resentDB.values) {
     count++;
   }
-  if (count > 4) {
+  if (count > 15) {
     resentDB.deleteAt(0);
   }
   getResentPlyed();

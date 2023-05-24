@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/main.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 import 'package:music_player/screens/main_screen.dart';
+import 'package:music_player/styles/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StartingPage extends StatelessWidget {
@@ -10,6 +12,7 @@ class StartingPage extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    var _mediaQuary = MediaQuery.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -18,64 +21,67 @@ class StartingPage extends StatelessWidget {
                 image: AssetImage('asset/images/images (1).jpeg'),
                 fit: BoxFit.cover)),
         child: SafeArea(
-            child: Padding(
-          padding: EdgeInsets.only(top: 70, right: 30, left: 30),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 10, right: 10, bottom: 15),
-                  child: Text(
-                    'Enter your name',
-                    style: TextStyle(color: Colors.white, fontSize: 30),
+            child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      'Enter your name',
+                      style: mainHead,
+                    ),
                   ),
+                ],
+              ),
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'enter your name please';
+                  } else {
+                    return null;
+                  }
+                },
+                controller: _usernameControler,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 6, 59, 102),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'enter your name please';
-                    } else {
-                      return null;
-                    }
-                  },
-                  controller: _usernameControler,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Color.fromARGB(255, 6, 59, 102),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, right: 90, left: 90),
-                  child: Container(
-                    width: 150,
-                    height: 55,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            forStart(context);
-                          } else {
-                            print('error');
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28))),
-                        child: Text("Let's start")),
-                  ),
-                ),
-                Padding(
+              ),
+              // SizedBox(
+              //   height: _mediaQuary.size.height * 0.3,
+              // ),
+              Padding(
                   padding:
-                      const EdgeInsets.only(top: 8.0, right: 120, left: 120),
-                  child: Container(
-                    width: 100,
-                    height: 55,
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: SlideAction(
+                    height: 65,
+                    onSubmit: () {
+                      if (formKey.currentState!.validate()) {
+                        forStart(context);
+                      } else {
+                        print('error');
+                      }
+                    },
+                    sliderRotate: false,
+                    text: "Let's Start",
+                    textStyle: TextStyle(fontSize: 23, color: Colors.white),
+                    innerColor: Colors.white,
+                    outerColor: Color.fromARGB(255, 6, 59, 102),
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: _mediaQuary.size.width * 0.5,
+                    height: _mediaQuary.size.height * 0.068,
                     child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushReplacement(context,
@@ -84,7 +90,7 @@ class StartingPage extends StatelessWidget {
                           }));
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: Color.fromARGB(255, 6, 59, 102),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(28))),
                         child: Row(
@@ -101,9 +107,9 @@ class StartingPage extends StatelessWidget {
                           ],
                         )),
                   ),
-                )
-              ],
-            ),
+                ],
+              )
+            ],
           ),
         )),
       ),

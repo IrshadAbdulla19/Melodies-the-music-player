@@ -60,34 +60,34 @@ class _PlayListScreenState extends State<PlayListScreen> {
                             style: mainHead,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 4,
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor:
-                                            Color.fromARGB(255, 6, 59, 102),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 10),
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(28))),
-                                  )),
-                              Expanded(
-                                flex: 1,
-                                child: CircleAvatar(
-                                  child: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.search)),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left: 10.0),
+                        //   child: Row(
+                        //     children: [
+                        //       Expanded(
+                        //           flex: 4,
+                        //           child: TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 filled: true,
+                        //                 fillColor:
+                        //                     Color.fromARGB(255, 6, 59, 102),
+                        //                 contentPadding: EdgeInsets.symmetric(
+                        //                     vertical: 10, horizontal: 10),
+                        //                 border: OutlineInputBorder(
+                        //                     borderRadius:
+                        //                         BorderRadius.circular(28))),
+                        //           )),
+                        //       Expanded(
+                        //         flex: 1,
+                        //         child: CircleAvatar(
+                        //           child: IconButton(
+                        //               onPressed: () {},
+                        //               icon: Icon(Icons.search)),
+                        //         ),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
                         Expanded(
                           flex: 3,
                           child: ValueListenableBuilder(
@@ -160,9 +160,7 @@ class _SongListPlaylistState extends State<SongListPlaylist> {
       onTap: () {
         ChangeFormatesong(widget.index, widget.allsongs);
         Navigator.push(context, MaterialPageRoute(builder: (cntx) {
-          return CurrentPlayScreen(
-            song: widget.song!,
-          );
+          return CurrentPlayScreen();
         }));
       },
       child: ListTile(
@@ -207,10 +205,10 @@ class _SongListPlaylistState extends State<SongListPlaylist> {
                   setState(() {
                     if (!widget.isFavsong) {
                       addFavsongs(widget.song, context);
-                      widget.isFavsong = isFav(widget.song);
+                      widget.isFavsong = !widget.isFavsong;
                     } else {
                       deleteFavSong(widget.song);
-                      widget.isFavsong = isFav(widget.song);
+                      widget.isFavsong = !widget.isFavsong;
                     }
                   });
                 },

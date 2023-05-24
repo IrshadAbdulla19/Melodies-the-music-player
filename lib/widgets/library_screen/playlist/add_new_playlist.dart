@@ -8,6 +8,7 @@ class PlaylistAdd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 14, 13, 31),
         // elevation: 0.0,

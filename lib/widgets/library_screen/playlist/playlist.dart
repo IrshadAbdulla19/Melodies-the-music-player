@@ -21,6 +21,7 @@ class PlayList extends StatefulWidget {
 class _PlayListState extends State<PlayList> {
   @override
   Widget build(BuildContext context) {
+    var _mediaQuary = MediaQuery.of(context);
     return
         // Padding(
         //   padding: const EdgeInsets.only(left: 10, top: 20),
@@ -121,7 +122,7 @@ class _PlayListState extends State<PlayList> {
                                   Row(
                                     children: [
                                       Container(
-                                        width: 110,
+                                        width: _mediaQuary.size.width * 0.3,
                                         height: 120,
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -132,7 +133,8 @@ class _PlayListState extends State<PlayList> {
                                                 fit: BoxFit.cover)),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(14.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 10.0, left: 5),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

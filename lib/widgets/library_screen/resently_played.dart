@@ -11,6 +11,7 @@ import 'package:music_player/functions/home_screen/home_function.dart';
 
 import 'package:music_player/screens/current_play_screen.dart';
 import 'package:music_player/styles/style.dart';
+import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
 import 'package:music_player/widgets/library_screen/playlist/ful_resent_play.dart';
 
 import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
@@ -223,6 +224,7 @@ class _SongListResentlyPlayedState extends State<SongListResentlyPlayed> {
     return showModalBottomSheet(
         context: cntx,
         builder: (BuildContext context) {
+          var mediaQuary = MediaQuery.of(context);
           return Container(
               height: 400,
               decoration: BoxDecoration(
@@ -234,13 +236,39 @@ class _SongListResentlyPlayedState extends State<SongListResentlyPlayed> {
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
-                              color: Colors.grey,
-                              child: IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: Icon(Icons.keyboard_arrow_down_sharp))),
+                            height: mediaQuary.size.height * 0.06,
+                            width: mediaQuary.size.width * 0.5,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (cntx1) {
+                                    return PlaylistAdd();
+                                  }));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 6, 59, 102),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(28))),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Create playlist",
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    Icon(
+                                      Icons.add,
+                                      size: 15,
+                                    )
+                                  ],
+                                )),
+                          ),
                           Expanded(
                             child: ValueListenableBuilder(
                               valueListenable: PlaylistNotifer,
