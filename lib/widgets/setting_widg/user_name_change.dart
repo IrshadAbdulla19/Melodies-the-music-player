@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/functions/library_functions/play_list.dart';
+import 'package:music_player/main.dart';
+import 'package:music_player/screens/main_screen.dart';
 import 'package:music_player/styles/style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PlaylistAdd extends StatelessWidget {
-  PlaylistAdd({super.key});
-  final _playlistNameController = TextEditingController();
-  final playlistKey = GlobalKey<FormState>();
+class UserNameChange extends StatefulWidget {
+  UserNameChange({
+    super.key,
+  });
+
+  @override
+  State<UserNameChange> createState() => _UserNameChangeState();
+}
+
+class _UserNameChangeState extends State<UserNameChange> {
+  final _UserNameController = TextEditingController();
+  final _userNameKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +32,7 @@ class PlaylistAdd extends StatelessWidget {
                 icon: Icon(Icons.keyboard_arrow_down_sharp))),
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('asset/images/images (1).jpeg'),
                 fit: BoxFit.cover)),
@@ -29,26 +40,29 @@ class PlaylistAdd extends StatelessWidget {
             child: Padding(
           padding: EdgeInsets.only(top: 150, left: 20, right: 20),
           child: Form(
-            key: playlistKey,
+            key: _userNameKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
                   padding: const EdgeInsets.only(bottom: 40.0, left: 10),
                   child: Text(
-                    'Create new playlist',
+                    'Enter your name',
                     style: mainHead,
                   ),
                 ),
                 TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'please enter your playlist name';
+                      return 'Please enter your name';
+                    } else {
+                      return null;
                     }
                   },
                   style: TextStyle(color: Colors.white),
-                  controller: _playlistNameController,
+                  controller: _UserNameController,
                   decoration: InputDecoration(
+                      hintStyle: TextStyle(color: Colors.white),
                       filled: true,
                       fillColor: Color.fromARGB(255, 6, 59, 102),
                       contentPadding:
@@ -79,10 +93,8 @@ class PlaylistAdd extends StatelessWidget {
                         height: 40,
                         child: ElevatedButton(
                             onPressed: () {
-                              if (playlistKey.currentState!.validate()) {
-                                changeToPlaylist(
-                                    _playlistNameController.text, context);
-                                Navigator.pop(context);
+                              if (_userNameKey.currentState!.validate()) {
+                                forStart(context);
                               } else {
                                 print('error');
                               }
@@ -91,7 +103,7 @@ class PlaylistAdd extends StatelessWidget {
                                 backgroundColor: Colors.blue,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(28))),
-                            child: Text('Create')),
+                            child: Text('Confirm')),
                       ),
                     ],
                   ),
@@ -102,5 +114,12 @@ class PlaylistAdd extends StatelessWidget {
         )),
       ),
     );
+  }
+
+  Future<void> forStart(BuildContext cntx) async {
+    final sharepref = await SharedPreferences.getInstance();
+    sharepref.setString(userIn, _UserNameController.text);
+    sharepref.setBool(userCheck, true);
+    Navigator.pop(context);
   }
 }

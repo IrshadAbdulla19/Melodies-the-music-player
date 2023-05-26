@@ -8,7 +8,8 @@ import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
 import 'package:music_player/main.dart';
 import 'package:music_player/screens/main_screen.dart';
 import 'package:music_player/screens/starting_screen.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+import 'package:music_player/styles/style.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -37,14 +38,45 @@ class _SplashScreenState extends State<SplashScreen> {
     var _mediaQuary = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
+      body: Container(
+        child: SafeArea(
           child: Center(
-        child: Image.asset(
-          'asset/images/logo_black.png',
-          width: _mediaQuary.size.width * 0.7,
-          height: _mediaQuary.size.height * 0.9,
+            child: Wrap(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'asset/images/logo_black.png',
+                      alignment: Alignment.center,
+                      scale: _mediaQuary.size.width * 0.0019,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Melodiues",
+                      style: mainHead,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Let's connect to the music♪ ",
+                      textAlign: TextAlign.center,
+                      style: splashMini,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
-      )),
+      ),
     );
   }
 

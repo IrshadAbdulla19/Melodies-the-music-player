@@ -102,13 +102,21 @@ class _HomeScreemState extends State<HomeScreem> {
                         )
                       ],
                     ),
-                    const Padding(
-                      padding: const EdgeInsets.only(left: 22.0, top: 15),
-                      child: Text(
-                        'All songs',
-                        style: miniHead,
-                      ),
-                    ),
+                    searchVar == 0
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 22.0, top: 15),
+                            child: Text(
+                              'All songs',
+                              style: miniHead,
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(left: 22.0, top: 15),
+                            child: Text(
+                              'Search',
+                              style: miniHead,
+                            ),
+                          ),
                     Expanded(
                         flex: 9,
                         child: searchVar == 0

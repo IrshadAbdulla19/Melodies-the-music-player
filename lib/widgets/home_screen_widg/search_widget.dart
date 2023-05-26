@@ -176,7 +176,10 @@ class _SongListState extends State<AllSongSerach> {
             },
             itemCount: widget.songDisplay.length)
         : const Center(
-            child: Text('No songa Found'),
+            child: Text(
+              'No songa Found',
+              style: mainHead,
+            ),
           );
   }
 

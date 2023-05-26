@@ -1,19 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:music_player/db/functions/play_list.dart';
 import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 
 // List<PlayListModel> playlistList = [];
 
-Future<void> changeToPlaylist(String playListName) async {
+Future<void> changeToPlaylist(String playListName, BuildContext context) async {
   String name = playListName;
   PlayListModel newPlaylist = PlayListModel(name: name);
   // creaetePlayList(newPlaylist);
-  createPlaylistDB(newPlaylist);
+  createPlaylistDB(newPlaylist, context);
 }
 
-Future<void> updatePlaylist(String name, int index, PlayListModel item) async {
+Future<void> updatePlaylist(
+    String name, int index, PlayListModel item, BuildContext context) async {
   PlayListModel newOne = PlayListModel(name: name, songs: item.songs);
-  updatePlaylistDB(newOne, index);
+  updatePlaylistDB(newOne, index, context);
 }
 // Future<void> creaetePlayList(PlayListModel playlistItem) async {
 //   playlistList.add(playlistItem);

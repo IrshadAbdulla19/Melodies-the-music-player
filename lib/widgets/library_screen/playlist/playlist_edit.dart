@@ -83,7 +83,7 @@ class _PlaylistRenameState extends State<PlaylistRename> {
                       child: ElevatedButton(
                           onPressed: () {
                             updatePlaylist(_playlistNameController.text,
-                                widget.index, widget.playlistItem);
+                                widget.index, widget.playlistItem, context);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

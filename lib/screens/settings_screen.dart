@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:music_player/styles/style.dart';
 
 import 'package:music_player/widgets/setting_widg/privacy_and_terms.dart';
+import 'package:music_player/widgets/setting_widg/user_name_change.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -127,6 +128,30 @@ class SettingScreen extends StatelessWidget {
                                       icon: Icon(Icons.file_copy_outlined)),
                                   const Text('Terms and conditions',
                                       style: settingsHeads)
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return UserNameChange();
+                              }));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      color: Colors.white,
+                                      iconSize: 35,
+                                      onPressed: () {},
+                                      icon: Icon(Icons.change_circle_outlined)),
+                                  const Text(
+                                    'Change username',
+                                    style: settingsHeads,
+                                  )
                                 ],
                               ),
                             ),

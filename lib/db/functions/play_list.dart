@@ -4,10 +4,27 @@ import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 
 ValueNotifier<List<PlayListModel>> PlaylistNotifer = ValueNotifier([]);
-Future<void> createPlaylistDB(PlayListModel playlistItem) async {
+Future<void> createPlaylistDB(
+    PlayListModel playlistItem, BuildContext context) async {
   final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
-  final _playListId = await playlistDB.add(playlistItem);
-  playlistItem.id = _playListId;
+  bool check = false;
+  for (var element in playlistDB.values) {
+    if (element.name == playlistItem.name) {
+      check = true;
+      break;
+    }
+  }
+  if (check == false) {
+    final _playListId = await playlistDB.add(playlistItem);
+    playlistItem.id = _playListId;
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Color.fromARGB(255, 11, 48, 78),
+      content: Text('The name is already exist'),
+    ));
+  }
+
   getPlaylist();
 }
 
@@ -65,9 +82,25 @@ Future<void> deletePlaylist(
   getPlaylist();
 }
 
-Future<void> updatePlaylistDB(PlayListModel newItem, int index) async {
+Future<void> updatePlaylistDB(
+    PlayListModel newItem, int index, BuildContext context) async {
   final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
-  playlistDB.putAt(index, newItem);
+  bool check = false;
+  for (var element in playlistDB.values) {
+    if (element.name == newItem.name) {
+      check = true;
+      break;
+    }
+  }
+  if (check = false) {
+    playlistDB.putAt(index, newItem);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.fromARGB(255, 11, 48, 78),
+        content: Text('The name is already exist')));
+  }
+
   getPlaylist();
 }
 
