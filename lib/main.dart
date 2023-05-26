@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -21,6 +22,9 @@ Future<void> main() async {
   }
   await Hive.openBox<AllSongsLists>('allsong');
   await Hive.openBox<PlayListModel>('playlist_db');
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(MyApp());
   SharedPreferences.getInstance();

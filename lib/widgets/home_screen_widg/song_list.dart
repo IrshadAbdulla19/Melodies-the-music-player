@@ -10,11 +10,10 @@ import 'package:music_player/db/functions/play_list.dart';
 import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
-import 'package:music_player/functions/library_functions/play_list.dart';
-import 'package:music_player/screens/current_play_screen.dart';
+
 import 'package:music_player/styles/style.dart';
 import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
-import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SongList extends StatefulWidget {
@@ -43,21 +42,26 @@ class _SongListState extends State<SongList> {
         valueListenable: AllSongsNotifier,
         builder: (BuildContext context, List<AllSongsLists> allSongs,
             Widget? child) {
-          return ListView.separated(
-              itemBuilder: (cntx, indx) {
-                var song = allSongs[indx];
-                bool isFavSong = isFav(song);
-                return AllSongsList(
-                  song: song,
-                  allSongs: allSongs,
-                  index: indx,
-                  isFavsong: isFavSong,
-                );
-              },
-              separatorBuilder: (cntx, indx) {
-                return Divider();
-              },
-              itemCount: allSongs.length);
+          return allSongs.length == 0
+              ? Text(
+                  'No songs',
+                  style: mainHead,
+                )
+              : ListView.separated(
+                  itemBuilder: (cntx, indx) {
+                    var song = allSongs[indx];
+                    bool isFavSong = isFav(song);
+                    return AllSongsList(
+                      song: song,
+                      allSongs: allSongs,
+                      index: indx,
+                      isFavsong: isFavSong,
+                    );
+                  },
+                  separatorBuilder: (cntx, indx) {
+                    return Divider();
+                  },
+                  itemCount: allSongs.length);
         });
   }
 }

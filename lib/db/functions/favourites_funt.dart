@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
+
 import 'package:music_player/db/songlists_db/songlist.dart';
 
 ValueNotifier<List<AllSongsLists>> FavSongsNotifier = ValueNotifier([]);

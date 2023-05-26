@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
-import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
 
 ValueNotifier<List<AllSongsLists>> resentPlyedNotifier = ValueNotifier([]);
 

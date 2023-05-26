@@ -2,9 +2,7 @@ import 'dart:ui';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-import 'package:music_player/db/functions/functions.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+
 import 'package:music_player/functions/home_screen/home_function.dart';
 import 'package:music_player/functions/library_functions/most_played.dart';
 import 'package:music_player/functions/library_functions/resent_played.dart';
