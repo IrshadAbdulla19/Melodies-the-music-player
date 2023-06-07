@@ -92,7 +92,7 @@ Future<void> updatePlaylistDB(
       break;
     }
   }
-  if (check = false) {
+  if (check == false) {
     playlistDB.putAt(index, newItem);
   } else {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
