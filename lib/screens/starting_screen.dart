@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/main.dart';
-import 'package:slide_to_act/slide_to_act.dart';
-
 import 'package:music_player/screens/main_screen.dart';
 import 'package:music_player/styles/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,24 +56,41 @@ class StartingPage extends StatelessWidget {
               // SizedBox(
               //   height: _mediaQuary.size.height * 0.3,
               // ),
-              Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  child: SlideAction(
-                    height: 65,
-                    onSubmit: () {
-                      if (formKey.currentState!.validate()) {
-                        forStart(context);
-                      } else {
-                        print('error');
-                      }
-                    },
-                    sliderRotate: false,
-                    text: "Let's Start",
-                    textStyle: TextStyle(fontSize: 23, color: Colors.white),
-                    innerColor: Colors.white,
-                    outerColor: Color.fromARGB(255, 6, 59, 102),
-                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    width: _mediaQuary.size.width * 0.7,
+                    height: _mediaQuary.size.height * 0.068,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            forStart(context);
+                          } else {
+                            print('error');
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 6, 59, 102),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(28))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Let's Start",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 15,
+                            )
+                          ],
+                        )),
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

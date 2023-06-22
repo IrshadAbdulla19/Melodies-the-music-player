@@ -1,19 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:hive_flutter/adapters.dart';
+
 import 'package:music_player/db/functions/favourites_funt.dart';
 import 'package:music_player/db/functions/play_list.dart';
 import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
-import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
-import 'package:music_player/screens/current_play_screen.dart';
+
 import 'package:music_player/styles/style.dart';
 import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
-import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AllSongSerach extends StatefulWidget {

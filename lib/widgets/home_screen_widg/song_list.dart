@@ -10,11 +10,10 @@ import 'package:music_player/db/functions/play_list.dart';
 import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
-import 'package:music_player/functions/library_functions/play_list.dart';
-import 'package:music_player/screens/current_play_screen.dart';
+
 import 'package:music_player/styles/style.dart';
 import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
-import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SongList extends StatefulWidget {
@@ -43,21 +42,26 @@ class _SongListState extends State<SongList> {
         valueListenable: AllSongsNotifier,
         builder: (BuildContext context, List<AllSongsLists> allSongs,
             Widget? child) {
-          return ListView.separated(
-              itemBuilder: (cntx, indx) {
-                var song = allSongs[indx];
-                bool isFavSong = isFav(song);
-                return AllSongsList(
-                  song: song,
-                  allSongs: allSongs,
-                  index: indx,
-                  isFavsong: isFavSong,
-                );
-              },
-              separatorBuilder: (cntx, indx) {
-                return Divider();
-              },
-              itemCount: allSongs.length);
+          return allSongs.length == 0
+              ? Text(
+                  'No songs',
+                  style: mainHead,
+                )
+              : ListView.separated(
+                  itemBuilder: (cntx, indx) {
+                    var song = allSongs[indx];
+                    bool isFavSong = isFav(song);
+                    return AllSongsList(
+                      song: song,
+                      allSongs: allSongs,
+                      index: indx,
+                      isFavsong: isFavSong,
+                    );
+                  },
+                  separatorBuilder: (cntx, indx) {
+                    return Divider();
+                  },
+                  itemCount: allSongs.length);
         });
   }
 }
@@ -161,58 +165,6 @@ class _AllSongsListState extends State<AllSongsList> {
                     bottomSheet(context, widget.song);
                   },
                   icon: Icon(Icons.playlist_add))
-              // IconButton(
-              //     onPressed: () {
-              //       ChangeFormatesong(indx, allSongs);
-              //       if (isPlaying) {
-              //         audioPlayer.pause();
-              //         setState(() {
-              //           isPlaying = false;
-              //         });
-              //       } else {
-              //         audioPlayer.play();
-              //         setState(() {
-              //           isPlaying = true;
-              //         });
-              //       }
-              //     },
-              //     iconSize: 40,
-              //     color: Colors.white,
-              //     icon: isPlaying
-              //         ? Icon(Icons.pause)
-              //         : Icon(Icons.play_arrow)),
-              // PopupMenuButton(
-              //     color: Colors.white,
-              //     surfaceTintColor: Colors.black,
-              //     itemBuilder: (context) => [
-              //           PopupMenuItem(
-              //               child: Row(
-              //             mainAxisAlignment:
-              //                 MainAxisAlignment.spaceBetween,
-              //             children: [
-              //               Text('Add Playlist'),
-              //               IconButton(
-              //                   onPressed: () {
-              //                     bottomSheet(context);
-              //                   },
-              //                   icon: Icon(Icons.playlist_add)),
-              //             ],
-              //           )),
-              //           PopupMenuItem(
-              //               child: Row(
-              //             mainAxisAlignment:
-              //                 MainAxisAlignment.spaceBetween,
-              //             children: [
-              //               Text('Add to favourites'),
-              //               IconButton(
-              //                   onPressed: () {
-              //                     addFavsongs(song, context);
-              //                     Navigator.pop(context);
-              //                   },
-              //                   icon: Icon(Icons.favorite))
-              //             ],
-              //           ))
-              //         ])
             ],
           ),
         ),

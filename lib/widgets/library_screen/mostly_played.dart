@@ -8,13 +8,10 @@ import 'package:music_player/db/functions/play_list.dart';
 import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
-import 'package:music_player/functions/library_functions/most_played.dart';
 
-import 'package:music_player/screens/current_play_screen.dart';
 import 'package:music_player/styles/style.dart';
 import 'package:music_player/widgets/library_screen/playlist/add_new_playlist.dart';
 
-import 'package:music_player/widgets/library_screen/playlist/playlist.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class MostlyPlayed extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/main.dart';
-import 'package:music_player/screens/main_screen.dart';
+
 import 'package:music_player/styles/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

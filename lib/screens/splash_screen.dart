@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     Image.asset(
                       'asset/images/logo_black.png',
                       alignment: Alignment.center,
-                      scale: _mediaQuary.size.width * 0.0019,
+                      scale: _mediaQuary.size.width * 0.002,
                     ),
                   ],
                 ),

@@ -3,12 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:music_player/db/functions/favourites_funt.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
+
 import 'package:music_player/db/songlists_db/songlist.dart';
 import 'package:music_player/styles/style.dart';
 
 import 'package:music_player/widgets/favourite_screen/song_list_fav.dart';
-import 'package:music_player/widgets/favourite_screen/top_part_fav.dart';
 
 class FavoutieScreen extends StatefulWidget {
   const FavoutieScreen({super.key});

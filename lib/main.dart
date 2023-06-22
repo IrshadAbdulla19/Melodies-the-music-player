@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -22,6 +23,9 @@ Future<void> main() async {
   await Hive.openBox<AllSongsLists>('allsong');
   await Hive.openBox<PlayListModel>('playlist_db');
 
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   runApp(MyApp());
   SharedPreferences.getInstance();
 }
@@ -33,8 +37,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: ThemeData().copyWith(
+        colorScheme: ThemeData().colorScheme.copyWith(secondary: Colors.blue),
       ),
       home: SplashScreen(),
     );

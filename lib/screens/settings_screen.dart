@@ -231,7 +231,7 @@ class SettingScreen extends StatelessWidget {
     return showModalBottomSheet(
         context: cntx,
         builder: (BuildContext context) {
-          const urllink = 'com.melodieuse.music_player';
+          const urllink = 'in.melodieuse.music_player';
           Share.share(urllink);
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
