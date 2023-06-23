@@ -6,14 +6,13 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
 import 'package:music_player/db/songlists_db/songlist.dart';
 
-import 'package:music_player/screens/splash_screen.dart';
+import 'package:music_player/presentation/splash/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const userIn = 'for show';
 const userCheck = 'for check';
 Future<void> main() async {
   await Hive.initFlutter();
-  // await createHiveBoxes();
   if (!Hive.isAdapterRegistered(AllSongsListsAdapter().typeId)) {
     Hive.registerAdapter(AllSongsListsAdapter());
   }
@@ -26,7 +25,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-  runApp(MyApp());
+  runApp(const MyApp());
   SharedPreferences.getInstance();
 }
 
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData().copyWith(
         colorScheme: ThemeData().colorScheme.copyWith(secondary: Colors.blue),
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
