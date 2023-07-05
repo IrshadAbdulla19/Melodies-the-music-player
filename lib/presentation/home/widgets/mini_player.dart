@@ -23,18 +23,11 @@ class _MiniPlayerState extends State<MiniPlayer> {
   bool isPlaying = true;
 
   @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   audioPlayer.dispose();
-  // }
-
-  @override
   Widget build(BuildContext context) {
     return audioPlayer.builderCurrent(builder: (cntx, playing) {
-      resentPlyed(int.parse(playing.audio.audio.metas.id!));
+      resentPlyed(int.parse(playing.audio.audio.metas.id!), context);
 
-      mostPlayAdd(int.parse(playing.audio.audio.metas.id!));
+      mostPlayAdd(int.parse(playing.audio.audio.metas.id!), context);
       return GestureDetector(
           onTap: () {
             // AllSongsLists song =

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/application/playlist/playlist_bloc.dart';
+
 import 'package:music_player/functions/library_functions/play_list.dart';
 import 'package:music_player/domain/core/style.dart';
 
-class PlaylistRename extends StatefulWidget {
+import 'package:music_player/infrastructure/db/songlists_db/playlist/play_list_model.dart';
+
+class PlaylistRename extends StatelessWidget {
   PlaylistRename({super.key, required this.index, required this.playlistItem});
   int index;
   PlayListModel playlistItem;
-  @override
-  State<PlaylistRename> createState() => _PlaylistRenameState();
-}
 
-class _PlaylistRenameState extends State<PlaylistRename> {
   final _playlistNameController = TextEditingController();
 
   @override
@@ -51,7 +51,7 @@ class _PlaylistRenameState extends State<PlaylistRename> {
                 controller: _playlistNameController,
                 decoration: InputDecoration(
                     hintStyle: TextStyle(color: Colors.white),
-                    hintText: widget.playlistItem.name,
+                    hintText: playlistItem.name,
                     filled: true,
                     fillColor: Color.fromARGB(255, 6, 59, 102),
                     contentPadding:
@@ -82,8 +82,10 @@ class _PlaylistRenameState extends State<PlaylistRename> {
                       height: 40,
                       child: ElevatedButton(
                           onPressed: () {
-                            updatePlaylist(_playlistNameController.text,
-                                widget.index, widget.playlistItem, context);
+                            context.read<PlaylistBloc>().add(PlaylistUpdate(
+                                index: index,
+                                name: _playlistNameController.text,
+                                playlist: playlistItem));
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

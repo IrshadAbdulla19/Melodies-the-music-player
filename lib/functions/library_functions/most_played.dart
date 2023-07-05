@@ -1,36 +1,20 @@
-import 'package:music_player/db/functions/functions.dart';
-import 'package:music_player/db/functions/most_played.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/application/mostplayed/mostplayed_bloc.dart';
+import 'package:music_player/infrastructure/db/functions/functions.dart';
+
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 
 List<AllSongsLists> mostPlayedList = [];
 // List<AllSongsLists> mostPlaySortList = [];
 
-Future<void> mostPlayAdd(int songID) async {
+Future<void> mostPlayAdd(int songID, BuildContext context) async {
   for (var element in AllSongsNotifier.value) {
     if (element.songID == songID) {
-      // if (mostPlayedList.contains(element)) {
-      //   for (var mostPlayEle in mostPlayedList) {
-      //     // print(mostPlayEle.name);
-      //     if (mostPlayEle.songID == songID) {
-      //       mostPlayEle.count = mostPlayEle.count! + 1;
-      //     }
-      //   }
-      // } else {
-      //   element.count = 1;
-      //   mostPlayedList.add(element);
-      // }
       mostPlayedList.insert(0, element);
-      addMostPlayedList(mostPlayedList[0]);
+      context
+          .read<MostplayedBloc>()
+          .add(MostplayedlistAddEvent(mostPlaySong: mostPlayedList[0]));
     }
   }
-  // AllSongsLists temp;
-  // for (var i = 0; i < mostPlayedList.length; i++) {
-  //   for (var j = i + 1; j < mostPlayedList.length; j++) {
-  //     if (mostPlayedList[i].count! < mostPlayedList[j].count!) {
-  //       temp = mostPlayedList[i];
-  //       mostPlayedList[i] = mostPlayedList[j];
-  //       mostPlayedList[j] = temp;
-  //     }
-  //   }
-  // }
 }

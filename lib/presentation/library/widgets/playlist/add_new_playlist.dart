@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/application/playlist/playlist_bloc.dart';
 import 'package:music_player/functions/library_functions/play_list.dart';
 import 'package:music_player/domain/core/style.dart';
 
@@ -80,8 +82,9 @@ class PlaylistAdd extends StatelessWidget {
                         child: ElevatedButton(
                             onPressed: () {
                               if (playlistKey.currentState!.validate()) {
-                                changeToPlaylist(
-                                    _playlistNameController.text, context);
+                                context.read<PlaylistBloc>().add(
+                                    PlaylistCreateEvent(
+                                        name: _playlistNameController.text));
                                 Navigator.pop(context);
                               } else {
                                 print('error');

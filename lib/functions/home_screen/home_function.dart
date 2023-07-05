@@ -1,7 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/db/functions/functions.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/infrastructure/db/functions/functions.dart';
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 
 final audioPlayer = AssetsAudioPlayer();
 ValueNotifier<bool> isSongPlayingNotifier = ValueNotifier(false);

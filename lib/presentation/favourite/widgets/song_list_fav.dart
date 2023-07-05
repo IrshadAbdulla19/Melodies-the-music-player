@@ -1,13 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/application/favourite/favourite_bloc.dart';
+
 import 'package:music_player/functions/home_screen/home_function.dart';
 
 import 'package:music_player/domain/core/style.dart';
+import 'package:music_player/infrastructure/db/functions/favourites_funt.dart';
+import 'package:music_player/infrastructure/db/functions/play_list.dart';
+
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 import 'package:music_player/presentation/library/widgets/playlist/add_new_playlist.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
@@ -30,106 +33,68 @@ class _SongListFavouriteState extends State<SongListFavourite> {
   // Future<bool> checkFav = isFav(widget.song);
   @override
   Widget build(BuildContext context) {
-    return
-        // ValueListenableBuilder(
-        //   valueListenable: ,
-        //   builder: (context, value, child) {
-        //     return GestureDetector(
-        //       child:
-        GestureDetector(
+    return GestureDetector(
       onTap: () {
         ChangeFormatesong(widget.index, widget.favSongs);
-        // Navigator.push(context, MaterialPageRoute(builder: (cntx) {
-        //   return CurrentPlayScreen();
-        // }));
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.black,
-          child: QueryArtworkWidget(
-            id: widget.song.songID,
-            type: ArtworkType.AUDIO,
-            nullArtworkWidget: Icon(Icons.music_note),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 4),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.black,
+            radius: 30,
+            child: QueryArtworkWidget(
+              id: widget.song.songID,
+              type: ArtworkType.AUDIO,
+              nullArtworkWidget: const Icon(Icons.music_note),
+            ),
           ),
-          radius: 30,
-        ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                widget.song.name,
-                style: songNameText,
-                overflow: TextOverflow.ellipsis,
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.song.name,
+                  style: songNameText,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
-        ),
-        subtitle: Row(
-          children: [
-            Expanded(
-              child: Text(
-                widget.song.artist,
-                style: artistNameText,
-                overflow: TextOverflow.ellipsis,
+            ],
+          ),
+          subtitle: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.song.artist,
+                  style: artistNameText,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
-        ),
-        trailing: Wrap(
-          spacing: 1,
-          children: [
-            IconButton(
-                iconSize: 35,
-                color: Colors.white,
-                onPressed: () {
-                  deleteFavSong(widget.song);
-                },
-                icon: Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                )),
-
-            IconButton(
-                iconSize: 35,
-                color: Colors.white,
-                onPressed: () {
-                  bottomSheet(context, widget.song);
-                },
-                icon: Icon(Icons.playlist_add))
-            // IconButton(
-            //     onPressed: () {},
-            //     iconSize: 40,
-            //     color: Colors.white,
-            //     icon: Icon(Icons.play_circle)),
-            // PopupMenuButton(
-            //     color: Colors.white,
-            //     itemBuilder: (context) => [
-            //           PopupMenuItem(
-            //               child: Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //             children: [
-            //               Text('Add Playlist'),
-            //               IconButton(
-            //                   onPressed: () {
-            //                     bottomSheet(context);
-            //                   },
-            //                   icon: Icon(Icons.playlist_add)),
-            //             ],
-            //           )),
-            //           PopupMenuItem(
-            //               child: Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //             children: [
-            //               Text('Remove from favourites'),
-            //               IconButton(
-            //                   onPressed: () {
-            //                     Navigator.pop(context);
-            //                   },
-            //                   icon: Icon(Icons.heart_broken_rounded))
-            //             ],
-            //           ))
-            //         ])
-          ],
+            ],
+          ),
+          trailing: Wrap(
+            spacing: 1,
+            children: [
+              IconButton(
+                  iconSize: 35,
+                  color: Colors.white,
+                  onPressed: () {
+                    context
+                        .read<FavouriteBloc>()
+                        .add(FavoutieDeleteEvent(favSong: widget.song));
+                  },
+                  icon: Icon(
+                    Icons.favorite,
+                    color: Colors.red,
+                  )),
+              IconButton(
+                  iconSize: 35,
+                  color: Colors.white,
+                  onPressed: () {
+                    bottomSheet(context, widget.song);
+                  },
+                  icon: Icon(Icons.playlist_add))
+            ],
+          ),
         ),
       ),
     );
@@ -190,8 +155,7 @@ class _SongListFavouriteState extends State<SongListFavourite> {
                           Expanded(
                             child: ValueListenableBuilder(
                               valueListenable: PlaylistNotifer,
-                              builder: (BuildContext context,
-                                  List<PlayListModel> playlistList,
+                              builder: (BuildContext context, playlistList,
                                   Widget? child) {
                                 return ListView.builder(
                                     itemCount: playlistList.length,

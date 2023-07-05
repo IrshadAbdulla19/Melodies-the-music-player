@@ -100,16 +100,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 }
 
-class ForPlayList extends StatefulWidget {
+class ForPlayList extends StatelessWidget {
   const ForPlayList({
     super.key,
   });
 
-  @override
-  State<ForPlayList> createState() => _ForPlayListState();
-}
-
-class _ForPlayListState extends State<ForPlayList> {
   @override
   Widget build(BuildContext context) {
     return Container(

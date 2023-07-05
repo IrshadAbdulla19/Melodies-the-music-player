@@ -4,16 +4,11 @@ import 'package:music_player/main.dart';
 import 'package:music_player/domain/core/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserNameChange extends StatefulWidget {
+class UserNameChange extends StatelessWidget {
   UserNameChange({
     super.key,
   });
 
-  @override
-  State<UserNameChange> createState() => _UserNameChangeState();
-}
-
-class _UserNameChangeState extends State<UserNameChange> {
   final _UserNameController = TextEditingController();
   final _userNameKey = GlobalKey<FormState>();
 
@@ -120,6 +115,6 @@ class _UserNameChangeState extends State<UserNameChange> {
     final sharepref = await SharedPreferences.getInstance();
     sharepref.setString(userIn, _UserNameController.text);
     sharepref.setBool(userCheck, true);
-    Navigator.pop(context);
+    Navigator.pop(cntx);
   }
 }

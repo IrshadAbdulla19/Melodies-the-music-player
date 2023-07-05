@@ -2,18 +2,19 @@ import 'dart:ui';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
 
 import 'package:music_player/functions/home_screen/home_function.dart';
 import 'package:music_player/functions/library_functions/most_played.dart';
 import 'package:music_player/functions/library_functions/resent_played.dart';
 
 import 'package:music_player/domain/core/style.dart';
+import 'package:music_player/infrastructure/db/functions/favourites_funt.dart';
+import 'package:music_player/infrastructure/db/functions/play_list.dart';
+import 'package:music_player/infrastructure/db/songlists_db/playlist/play_list_model.dart';
+
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 import 'package:music_player/presentation/library/widgets/playlist/add_new_playlist.dart';
+import 'package:music_player/presentation/library/widgets/playlist/playlist_widget.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -38,19 +39,6 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
   String mm = '';
   String ss = '';
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getCurrentDuration();
-  // }
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   audioPlayer.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     var _mediaQuary = MediaQuery.of(context);
@@ -58,8 +46,9 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: audioPlayer.builderCurrent(builder: (cntx, playing) {
-          resentPlyed(int.parse(playing.audio.audio.metas.id!));
-          mostPlayAdd(int.parse(playing.audio.audio.metas.id!));
+          resentPlyed(int.parse(playing.audio.audio.metas.id!), context);
+          mostPlayAdd(int.parse(playing.audio.audio.metas.id!), context);
+
           AllSongsLists nowSong =
               changeToSongModel(int.parse(playing.audio.audio.metas.id!));
           bool isFavsong = isFav(nowSong);
@@ -359,110 +348,10 @@ class _CurrentPlayScreenState extends State<CurrentPlayScreen> {
         context: cntx,
         builder: (BuildContext context) {
           var mediaQuary = MediaQuery.of(context);
-          return Container(
-              height: 400,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('asset/images/images (2).jpeg'),
-                      fit: BoxFit.cover)),
-              child: ClipRRect(
-                  child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: mediaQuary.size.height * 0.06,
-                            width: mediaQuary.size.width * 0.5,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (cntx1) {
-                                    return PlaylistAdd();
-                                  }));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromARGB(255, 6, 59, 102),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(28))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Create playlist",
-                                      style: TextStyle(fontSize: 17),
-                                    ),
-                                    Icon(
-                                      Icons.add,
-                                      size: 15,
-                                    )
-                                  ],
-                                )),
-                          ),
-                          Expanded(
-                            child: ValueListenableBuilder(
-                              valueListenable: PlaylistNotifer,
-                              builder: (BuildContext context,
-                                  List<PlayListModel> playlistList,
-                                  Widget? child) {
-                                return ListView.builder(
-                                    itemCount: playlistList.length,
-                                    itemBuilder: (cntx, indx) {
-                                      var playlist = playlistList[indx];
-                                      bool isInPlaylist =
-                                          checkPlaylist(song, indx);
-                                      return Card(
-                                        color: Color.fromARGB(255, 33, 87, 158),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                playlist.name,
-                                                style: songNameText,
-                                              ),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      if (!isInPlaylist) {
-                                                        addSongsToPlaylist(
-                                                            playlistList[indx],
-                                                            song);
-                                                        isInPlaylist =
-                                                            !isInPlaylist;
-                                                      } else {
-                                                        removeSongFromDB(song,
-                                                            playlist, indx);
-                                                        isInPlaylist =
-                                                            !isInPlaylist;
-                                                      }
-                                                    });
-                                                  },
-                                                  icon: !isInPlaylist
-                                                      ? Icon(
-                                                          Icons.add_circle,
-                                                          color: Colors.white,
-                                                        )
-                                                      : Icon(
-                                                          Icons.remove,
-                                                          color: Colors.white,
-                                                        ))
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              },
-                            ),
-                          ),
-                        ],
-                      ))));
+          return PlayListShowWidget(
+            mediaQuary: mediaQuary,
+            song: song,
+          );
         });
   }
 }

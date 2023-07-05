@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-import 'package:music_player/db/functions/functions.dart';
-import 'package:music_player/db/functions/most_played.dart';
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/functions/resent_played_db.dart';
 import 'package:music_player/functions/settings_function/for_fetch_songs.dart';
+import 'package:music_player/infrastructure/db/functions/favourites_funt.dart';
+import 'package:music_player/infrastructure/db/functions/functions.dart';
+import 'package:music_player/infrastructure/db/functions/most_played.dart';
+import 'package:music_player/infrastructure/db/functions/play_list.dart';
+import 'package:music_player/infrastructure/db/functions/resent_played_db.dart';
 import 'package:music_player/main.dart';
 
 import 'package:music_player/domain/core/style.dart';

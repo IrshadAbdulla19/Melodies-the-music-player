@@ -1,5 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
+
 part 'play_list_model.g.dart';
 
 @HiveType(typeId: 1)

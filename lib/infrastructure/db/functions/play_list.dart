@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+
+import 'package:music_player/infrastructure/db/songlists_db/playlist/play_list_model.dart';
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 
 ValueNotifier<List<PlayListModel>> PlaylistNotifer = ValueNotifier([]);
+List<PlayListModel> playListBloc = [];
 Future<void> createPlaylistDB(
     PlayListModel playlistItem, BuildContext context) async {
   final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
@@ -28,8 +30,32 @@ Future<void> createPlaylistDB(
   getPlaylist();
 }
 
+Future<void> createPlayListDB(
+  PlayListModel playlistItem,
+) async {
+  final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
+  bool check = false;
+  for (var element in playlistDB.values) {
+    if (element.name == playlistItem.name) {
+      check = true;
+      break;
+    }
+  }
+  if (check == false) {
+    final _playListId = await playlistDB.add(playlistItem);
+    playlistItem.id = _playListId;
+  } else {
+    return;
+  }
+
+  getPlaylist();
+}
+
 Future<void> getPlaylist() async {
   final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
+  playListBloc.clear();
+  playListBloc.addAll(playlistDB.values);
+
   PlaylistNotifer.value.clear();
   PlaylistNotifer.value.addAll(playlistDB.values);
   PlaylistNotifer.notifyListeners();
@@ -104,6 +130,25 @@ Future<void> updatePlaylistDB(
   getPlaylist();
 }
 
+Future<void> updatePlayListDB(
+  PlayListModel newItem,
+  int index,
+) async {
+  final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
+  bool check = false;
+  for (var element in playlistDB.values) {
+    if (element.name == newItem.name) {
+      check = true;
+      break;
+    }
+  }
+  if (check == false) {
+    playlistDB.putAt(index, newItem);
+  } else {}
+
+  getPlaylist();
+}
+
 Future<void> removeSongFromDB(
     AllSongsLists? song, PlayListModel item, int playIndex) async {
   final playlistDB = await Hive.openBox<PlayListModel>('playlist_db');
@@ -111,12 +156,6 @@ Future<void> removeSongFromDB(
   bool check = false;
   List<AllSongsLists> temp = [];
 
-  // for (var element in playlistDB.values) {
-  //   if (element == item) {
-  //     break;
-  //   }
-  //   index++;
-  // }
   int songIdx = 0;
   String name = item.name;
   List<AllSongsLists> currentSongs = item.songs ?? temp;

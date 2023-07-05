@@ -1,4 +1,4 @@
-import 'package:music_player/db/functions/functions.dart';
+import 'package:music_player/infrastructure/db/functions/functions.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';

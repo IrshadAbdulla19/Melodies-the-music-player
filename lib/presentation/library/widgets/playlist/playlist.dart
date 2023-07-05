@@ -1,84 +1,28 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/application/playlist/playlist_bloc.dart';
 
 import 'package:music_player/domain/core/style.dart';
+import 'package:music_player/infrastructure/db/functions/play_list.dart';
+
+import 'package:music_player/infrastructure/db/songlists_db/playlist/play_list_model.dart';
 
 import 'package:music_player/presentation/library/widgets/playlist/playlist_edit.dart';
 import 'package:music_player/presentation/library/widgets/playlist/playlist_screen.dart';
 
 final playlistNames = ['melodies', 'sleeping pills', 'work out', 'personal'];
 
-class PlayList extends StatefulWidget {
+class PlayList extends StatelessWidget {
   const PlayList({super.key});
 
   @override
-  State<PlayList> createState() => _PlayListState();
-}
-
-class _PlayListState extends State<PlayList> {
-  @override
   Widget build(BuildContext context) {
     var _mediaQuary = MediaQuery.of(context);
-    return
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 10, top: 20),
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       const Padding(
-        //         padding: const EdgeInsets.only(left: 15.0, bottom: 10),
-        //         child: Text(
-        //           'Playlist',
-        //           style: mainHead,
-        //         ),
-        //       ),
-        //       Padding(
-        //         padding: const EdgeInsets.only(left: 10.0),
-        //         child: Row(
-        //           children: [
-        //             Expanded(
-        //               flex: 1,
-        //               child: CircleAvatar(
-        //                 child: IconButton(
-        //                     onPressed: () {
-        //                       Navigator.push(context,
-        //                           MaterialPageRoute(builder: (cntx) {
-        //                         return PlaylistAdd();
-        //                       }));
-        //                     },
-        //                     icon: Icon(Icons.playlist_add)),
-        //               ),
-        //             ),
-        //             Expanded(
-        //                 flex: 4,
-        //                 child: TextFormField(
-        //                   style: TextStyle(color: Colors.white),
-        //                   decoration: InputDecoration(
-        //                       filled: true,
-        //                       fillColor: Color.fromARGB(255, 6, 59, 102),
-        //                       contentPadding: const EdgeInsets.symmetric(
-        //                           vertical: 10, horizontal: 10),
-        //                       border: OutlineInputBorder(
-        //                           borderRadius: BorderRadius.circular(28))),
-        //                 )),
-        //             Expanded(
-        //               flex: 1,
-        //               child: CircleAvatar(
-        //                 child:
-        //                     IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-
-        ValueListenableBuilder(
-      valueListenable: PlaylistNotifer,
-      builder:
-          (BuildContext cntx, List<PlayListModel> playlistList, Widget? child) {
+    return BlocBuilder<PlaylistBloc, PlaylistState>(
+      builder: (context, state) {
+        var playlistList = state.thisPlaylist;
         return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -96,9 +40,6 @@ class _PlayListState extends State<PlayList> {
                   },
                   child: Card(
                       shape: RoundedRectangleBorder(
-                        // side: BorderSide(
-                        //   color: Colors.greenAccent,
-                        // ),
                         borderRadius:
                             BorderRadius.circular(40.0), //<-- SEE HERE
                       ),

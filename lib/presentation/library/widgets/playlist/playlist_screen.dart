@@ -1,12 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/application/playlist/playlist_bloc.dart';
+
 import 'package:music_player/functions/home_screen/home_function.dart';
+import 'package:music_player/infrastructure/db/functions/favourites_funt.dart';
+import 'package:music_player/infrastructure/db/functions/play_list.dart';
+import 'package:music_player/infrastructure/db/songlists_db/playlist/play_list_model.dart';
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 import 'package:music_player/presentation/current_play/current_play_screen.dart';
 import 'package:music_player/domain/core/style.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -21,13 +24,13 @@ class PlayListScreen extends StatefulWidget {
 }
 
 class _PlayListScreenState extends State<PlayListScreen> {
-  late Box<PlayListModel> playlistBox;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    playlistBox = Hive.box('playlist_db');
-  }
+  // late Box<PlayListModel> playlistBox;
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   playlistBox = Hive.box('playlist_db');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,41 +63,11 @@ class _PlayListScreenState extends State<PlayListScreen> {
                             style: mainHead,
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 10.0),
-                        //   child: Row(
-                        //     children: [
-                        //       Expanded(
-                        //           flex: 4,
-                        //           child: TextFormField(
-                        //             decoration: InputDecoration(
-                        //                 filled: true,
-                        //                 fillColor:
-                        //                     Color.fromARGB(255, 6, 59, 102),
-                        //                 contentPadding: EdgeInsets.symmetric(
-                        //                     vertical: 10, horizontal: 10),
-                        //                 border: OutlineInputBorder(
-                        //                     borderRadius:
-                        //                         BorderRadius.circular(28))),
-                        //           )),
-                        //       Expanded(
-                        //         flex: 1,
-                        //         child: CircleAvatar(
-                        //           child: IconButton(
-                        //               onPressed: () {},
-                        //               icon: Icon(Icons.search)),
-                        //         ),
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
                         Expanded(
                           flex: 3,
-                          child: ValueListenableBuilder(
-                            valueListenable: PlaylistNotifer,
-                            builder: (BuildContext context,
-                                List<PlayListModel> playlistList,
-                                Widget? child) {
+                          child: BlocBuilder<PlaylistBloc, PlaylistState>(
+                            builder: (context, state) {
+                              var playlistList = state.thisPlaylist;
                               return ListView.separated(
                                   itemBuilder: (cntx, indx) {
                                     var song =
@@ -150,13 +123,7 @@ class SongListPlaylist extends StatefulWidget {
 class _SongListPlaylistState extends State<SongListPlaylist> {
   @override
   Widget build(BuildContext context) {
-    return
-        // ValueListenableBuilder(
-        //   valueListenable: ,
-        //   builder: (context, value, child) {
-        //     return GestureDetector(
-        //       child:
-        GestureDetector(
+    return GestureDetector(
       onTap: () {
         ChangeFormatesong(widget.index, widget.allsongs);
         Navigator.push(context, MaterialPageRoute(builder: (cntx) {
@@ -223,33 +190,15 @@ class _SongListPlaylistState extends State<SongListPlaylist> {
                       )),
             IconButton(
                 onPressed: () {
-                  removeSongFromDB(
-                      widget.song, widget.item, widget.playlistIndex);
+                  context.read<PlaylistBloc>().add(PlaylistDeleteSong(
+                      song: widget.song,
+                      playlist: widget.item,
+                      index: widget.index));
                 },
                 icon: Icon(
                   Icons.delete,
                   color: Colors.white,
                 )),
-            // PopupMenuButton(
-            //     color: Colors.white,
-            //     itemBuilder: (context) => [
-            //           PopupMenuItem(
-            //               child: Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //             children: [
-            //               Text('Remove from Playlist'),
-            //             ],
-            //           )),
-            //           PopupMenuItem(
-            //               child: Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //             children: [
-            //               Text('Add to favourites'),
-            //               IconButton(
-            //                   onPressed: () {}, icon: Icon(Icons.favorite))
-            //             ],
-            //           ))
-            //         ])
           ],
         ),
       ),

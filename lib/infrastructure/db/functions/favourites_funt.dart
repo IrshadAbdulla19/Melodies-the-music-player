@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
 
-import 'package:music_player/db/songlists_db/songlist.dart';
-
-ValueNotifier<List<AllSongsLists>> FavSongsNotifier = ValueNotifier([]);
-
+// ValueNotifier<List<AllSongsLists>> FavSongsNotifier = ValueNotifier([]);
+List<AllSongsLists> allFavSongsList = [];
 Future<void> getFavSongs() async {
   final favsongdatabase = await Hive.openBox<AllSongsLists>('favsongs');
-  FavSongsNotifier.value.clear();
-  FavSongsNotifier.value.addAll(favsongdatabase.values);
-  FavSongsNotifier.notifyListeners();
+  allFavSongsList.clear();
+  allFavSongsList.addAll(favsongdatabase.values);
+
+  // FavSongsNotifier.value.clear();
+  // FavSongsNotifier.value.addAll(favsongdatabase.values);
+  // FavSongsNotifier.notifyListeners();
 }
 
-Future<void> addFavsongs(AllSongsLists? value, BuildContext contxt) async {
+Future<void> addFavSongs(
+  AllSongsLists? value,
+) async {
   final favsongdatabase = await Hive.openBox<AllSongsLists>('favsongs');
-  // final favsong = AllSongsLists(
-  //     name: value.name,
-  //     artist: value.artist,
-  //     uri: value.uri,
-  //     songID: value.songID,
-  //     duration: value.duration);
+
   bool flag = true;
 
   for (var element in favsongdatabase.values) {
@@ -31,16 +30,23 @@ Future<void> addFavsongs(AllSongsLists? value, BuildContext contxt) async {
     final _keyId = await favsongdatabase.add(value);
     value.id = _keyId;
     getFavSongs();
-    // FavSongsNotifier.value.add(value);
-    // FavSongsNotifier.notifyListeners();
-    // print(favsongdatabase.keys);
-    ScaffoldMessenger.of(contxt).showSnackBar(
-      const SnackBar(
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Color.fromARGB(255, 11, 48, 78),
-        content: Text('The song is add into Favourites'),
-      ),
-    );
+  }
+}
+
+Future<void> addFavsongs(AllSongsLists? value, BuildContext contxt) async {
+  final favsongdatabase = await Hive.openBox<AllSongsLists>('favsongs');
+
+  bool flag = true;
+
+  for (var element in favsongdatabase.values) {
+    if (value?.songID == element.songID) {
+      flag = false;
+    }
+  }
+  if (flag == true && value != null) {
+    final _keyId = await favsongdatabase.add(value);
+    value.id = _keyId;
+    getFavSongs();
   }
 }
 
@@ -62,7 +68,7 @@ Future<void> deleteFavSong(AllSongsLists? song) async {
 }
 
 isFav(AllSongsLists? value) {
-  for (var element in FavSongsNotifier.value) {
+  for (var element in allFavSongsList) {
     if (value?.songID == element.songID) {
       return true;
     }

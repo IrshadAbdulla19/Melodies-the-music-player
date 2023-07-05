@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 
 ValueNotifier<List<AllSongsLists>> AllSongsNotifier = ValueNotifier([]);
+List<AllSongsLists> allSongsLists = [];
 
 Future<void> getAllSongs() async {
   final allsongdatabase = await Hive.openBox<AllSongsLists>('allsong');
+  allSongsLists.clear();
+  allSongsLists.addAll(allsongdatabase.values);
+
   AllSongsNotifier.value.clear();
   AllSongsNotifier.value.addAll(allsongdatabase.values);
   AllSongsNotifier.notifyListeners();
@@ -31,8 +36,8 @@ addallsongtodata(SongModel data) async {
     final _keyId = await allsongdatabase.add(newsong);
     newsong.id = _keyId;
     getAllSongs();
-    AllSongsNotifier.value.add(newsong);
-    AllSongsNotifier.notifyListeners();
+    // AllSongsNotifier.value.add(newsong);
+    // AllSongsNotifier.notifyListeners();
     // print(allsongdatabase.values);
   }
 }

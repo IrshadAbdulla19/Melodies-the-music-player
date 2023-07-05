@@ -1,43 +1,25 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:hive_flutter/adapters.dart';
-import 'package:music_player/db/functions/favourites_funt.dart';
-
-import 'package:music_player/db/functions/functions.dart';
-import 'package:music_player/db/functions/play_list.dart';
-import 'package:music_player/db/songlists_db/favourites/play_list_model.dart';
-import 'package:music_player/db/songlists_db/songlist.dart';
+import 'package:music_player/application/favourite/favourite_bloc.dart';
 import 'package:music_player/functions/home_screen/home_function.dart';
-
 import 'package:music_player/domain/core/style.dart';
-import 'package:music_player/presentation/library/widgets/playlist/add_new_playlist.dart';
+import 'package:music_player/infrastructure/db/functions/favourites_funt.dart';
 
+import 'package:music_player/infrastructure/db/functions/functions.dart';
+
+import 'package:music_player/infrastructure/db/songlists_db/songlist.dart';
+import 'package:music_player/presentation/favourite/widgets/fav_widget.dart';
+
+import 'package:music_player/presentation/library/widgets/playlist/playlist_widget.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class SongList extends StatefulWidget {
+class SongList extends StatelessWidget {
   SongList({super.key});
 
   @override
-  State<SongList> createState() => _SongListState();
-}
-
-class _SongListState extends State<SongList> {
-  late Box<AllSongsLists> allsongBox;
-  late Box<PlayListModel> playlistBox;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    allsongBox = Hive.box('allsong');
-    playlistBox = Hive.box('playlist_db');
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var _mediaQuary = MediaQuery.of(context);
     return ValueListenableBuilder(
         valueListenable: AllSongsNotifier,
         builder: (BuildContext context, List<AllSongsLists> allSongs,
@@ -77,6 +59,7 @@ class AllSongsList extends StatefulWidget {
   List<AllSongsLists> allSongs;
   int index;
   bool isFavsong;
+
   @override
   State<AllSongsList> createState() => _AllSongsListState();
 }
@@ -86,12 +69,7 @@ class _AllSongsListState extends State<AllSongsList> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // playsongs(indx);
         ChangeFormatesong(widget.index, widget.allSongs);
-
-        // Navigator.push(context, MaterialPageRoute(builder: (cntx) {
-        //   return CurrentPlayScreen();
-        // }));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 4),
@@ -101,12 +79,12 @@ class _AllSongsListState extends State<AllSongsList> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           leading: CircleAvatar(
             backgroundColor: Colors.black,
+            radius: 30,
             child: QueryArtworkWidget(
               id: widget.song.songID,
               type: ArtworkType.AUDIO,
-              nullArtworkWidget: Icon(Icons.music_note),
+              nullArtworkWidget: const Icon(Icons.music_note),
             ),
-            radius: 30,
           ),
           title: Row(
             children: [
@@ -141,10 +119,15 @@ class _AllSongsListState extends State<AllSongsList> {
                   onPressed: () {
                     setState(() {
                       if (!widget.isFavsong) {
-                        addFavsongs(widget.song, context);
+                        context
+                            .read<FavouriteBloc>()
+                            .add(FavoutiesAddEvent(favSong: widget.song));
+
                         widget.isFavsong = !widget.isFavsong;
                       } else {
-                        deleteFavSong(widget.song);
+                        context
+                            .read<FavouriteBloc>()
+                            .add(FavoutieDeleteEvent(favSong: widget.song));
                         widget.isFavsong = !widget.isFavsong;
                       }
                     });
@@ -177,110 +160,10 @@ class _AllSongsListState extends State<AllSongsList> {
         context: cntx,
         builder: (BuildContext context) {
           var mediaQuary = MediaQuery.of(context);
-          return Container(
-              height: 400,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('asset/images/images (2).jpeg'),
-                      fit: BoxFit.cover)),
-              child: ClipRRect(
-                  child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: mediaQuary.size.height * 0.06,
-                            width: mediaQuary.size.width * 0.5,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (cntx1) {
-                                    return PlaylistAdd();
-                                  }));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromARGB(255, 6, 59, 102),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(28))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Create playlist",
-                                      style: TextStyle(fontSize: 17),
-                                    ),
-                                    Icon(
-                                      Icons.add,
-                                      size: 15,
-                                    )
-                                  ],
-                                )),
-                          ),
-                          Expanded(
-                            child: ValueListenableBuilder(
-                              valueListenable: PlaylistNotifer,
-                              builder: (BuildContext context,
-                                  List<PlayListModel> playlistList,
-                                  Widget? child) {
-                                return ListView.builder(
-                                    itemCount: playlistList.length,
-                                    itemBuilder: (cntx, indx) {
-                                      var playlist = playlistList[indx];
-                                      bool isInPlaylist =
-                                          checkPlaylist(song, indx);
-                                      return Card(
-                                        color: Color.fromARGB(255, 33, 87, 158),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                playlist.name,
-                                                style: songNameText,
-                                              ),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      if (!isInPlaylist) {
-                                                        addSongsToPlaylist(
-                                                            playlistList[indx],
-                                                            song);
-                                                        isInPlaylist =
-                                                            !isInPlaylist;
-                                                      } else {
-                                                        removeSongFromDB(song,
-                                                            playlist, indx);
-                                                        isInPlaylist =
-                                                            !isInPlaylist;
-                                                      }
-                                                    });
-                                                  },
-                                                  icon: !isInPlaylist
-                                                      ? Icon(
-                                                          Icons.add_circle,
-                                                          color: Colors.white,
-                                                        )
-                                                      : Icon(
-                                                          Icons.remove,
-                                                          color: Colors.white,
-                                                        ))
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              },
-                            ),
-                          ),
-                        ],
-                      ))));
+          return PlayListShowWidget(
+            mediaQuary: mediaQuary,
+            song: song,
+          );
         });
   }
 }

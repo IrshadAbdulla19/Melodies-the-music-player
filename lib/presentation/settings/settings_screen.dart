@@ -28,8 +28,8 @@ class SettingScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 80, left: 40),
                   child: ListView(children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         Icon(
                           Icons.settings,
                           color: Colors.white,
@@ -45,7 +45,7 @@ class SettingScreen extends StatelessWidget {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 10, top: 20),
+                      padding: const EdgeInsets.only(left: 10, top: 20),
                       child: Column(
                         children: [
                           GestureDetector(
@@ -76,7 +76,7 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.account_circle)),
+                                      icon: const Icon(Icons.account_circle)),
                                   const Text(
                                     'About',
                                     style: settingsHeads,
@@ -102,7 +102,8 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.privacy_tip_sharp)),
+                                      icon:
+                                          const Icon(Icons.privacy_tip_sharp)),
                                   const Text('Privacy', style: settingsHeads)
                                 ],
                               ),
@@ -125,7 +126,8 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.file_copy_outlined)),
+                                      icon:
+                                          const Icon(Icons.file_copy_outlined)),
                                   const Text('Terms and conditions',
                                       style: settingsHeads)
                                 ],
@@ -147,7 +149,8 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.change_circle_outlined)),
+                                      icon: const Icon(
+                                          Icons.change_circle_outlined)),
                                   const Text(
                                     'Change username',
                                     style: settingsHeads,
@@ -168,30 +171,12 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.share)),
+                                      icon: const Icon(Icons.share)),
                                   const Text('For share', style: settingsHeads)
                                 ],
                               ),
                             ),
                           ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     checkpermission();
-                          //   },
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.all(14.0),
-                          //     child: Row(
-                          //       children: [
-                          //         IconButton(
-                          //             color: Colors.white,
-                          //             iconSize: 35,
-                          //             onPressed: () {},
-                          //             icon: Icon(Icons.sync)),
-                          //         const Text('For Sync', style: settingsHeads)
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
                           GestureDetector(
                             onTap: () {
                               forExit(context);
@@ -204,7 +189,8 @@ class SettingScreen extends StatelessWidget {
                                       color: Colors.white,
                                       iconSize: 35,
                                       onPressed: () {},
-                                      icon: Icon(Icons.exit_to_app_rounded)),
+                                      icon: const Icon(
+                                          Icons.exit_to_app_rounded)),
                                   const Text('Exit app', style: settingsHeads)
                                 ],
                               ),
@@ -239,11 +225,3 @@ class SettingScreen extends StatelessWidget {
         });
   }
 }
-
-// void shareText() async {
-//   try {
-//     await FlutterShare.share(title: 'check out this flutter app');
-//   } catch (e) {
-//     print('Sharing failed: $e');
-//   }
-// }
